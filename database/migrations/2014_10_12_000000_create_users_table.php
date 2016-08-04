@@ -17,6 +17,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
+            $table->enum('sex',['man','woman']);
+            $table->integer('user_group')->default('2');
             $table->rememberToken();
             $table->timestamps();
         });
