@@ -21,4 +21,8 @@ class Brand extends Model
             return $brand->id;
         }
     }
+
+    public static function ChangeBrand(Request $request){
+        return self::CreateNewBrand($request);
+    }
 }

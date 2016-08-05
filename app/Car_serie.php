@@ -21,6 +21,26 @@ class Car_serie extends Model
         if($series=Car_serie::findOrFail($request->get('car_series'))){
             return $series->id;
         }else{
+            $brand_id=array('brand_id'=>$brand_id);
+            Car_serie::create(array_merge($brand_id,$request->get('car_series')));
+            $series=Car_serie::find($request->get('car_series'));
+            return $series->id;
+        }
+    }
+
+    public static function ChangeSeries(Request $request){
+        $brand_id=Brand::ChangeBrand($request);
+        if($series=Car_serie::findOrFail($request->get('car_series'))){
+            if($series->brand_id==$brand_id) {
+                return $series->id;
+            }else{
+                $brand_id=array('brand_id'=>$brand_id);
+                Car_serie::create(array_merge($brand_id,$request->get('car_series')));
+                $series=Car_serie::find($request->get('car_series'));
+                return $series->id;
+            }
+        }else{
+            $brand_id=array('brand_id'=>$brand_id);
             Car_serie::create(array_merge($brand_id,$request->get('car_series')));
             $series=Car_serie::find($request->get('car_series'));
             return $series->id;
