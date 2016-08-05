@@ -9,17 +9,19 @@ class Brand extends Model
 {
     protected $table='brands';
     protected $fillable=['brands'];
+
     public function hasManySeries(){
-        return $this->hasMany('App\Car_serie','brand_id','id');
+        return $this->hasMany('App\Car_serie','brands_id','id');
     }
 
     public static function CreateNewBrand(Request $request){
-        if($brand=Brand::findOrFail($request->get('brands'))){
-            return $brand->id;
+        $brand=Brand::where('brands',$request->get('brands'))->get();
+        if(!$brand->isEmpty()){
+            return $brand->get('0')->id;
         }else{
-            Brand::create($request->get('brands'));
-            $brand=Brand::find($request->get('brands'));
-            return $brand->id;
+            Brand::create(array('brands'=>$request->get('brands')));
+            $brand=Brand::where('brands',$request->get('brands'))->get();
+            return $brand->get('0')->id;
         }
     }
 

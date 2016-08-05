@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','FrontController@index');
+Route::get('/new','frontController@create');
+Route::post('/new','frontController@store');

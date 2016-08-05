@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,20 +20,21 @@ class Car_type extends Model
     }
 
     /**
-     * 新建车型
+     * 新建车型     ！！！！存在问题：时间不对
      * @param Request $request
      * @return bool
      */
     public static function CreateNewType(Request $request){
         $series_id=Car_serie::CreateNewSeries($request);
-        if($type=Car_type::findOrFail($request->get('car_type'))){
+        $type=Car_type::where('car_type',$request->get('car_type'))->get();
+        if((!$type->isEmpty())&&(Car_type::isSameType($type,$series_id))){
             return false;
         }else {
             $series_id=array('series_id'=>$series_id);
             Car_type::create(array_merge($series_id, $request->except('brands', 'ar_series')));
-            $type=Car_type::find($request->get('car_type'));
-            $user=User::find(Auth::user());
-            User_type::CreateNewRelation($type->id,$user->id);
+            $type=Car_type::where('car_type',$request->get('car_type'))->get();
+            $user=User::where('name',Auth::user())->get();
+            User_type::CreateNewRelation(1,$type->get('0')->id);//1  =>  $user->get('0')->id
             return true;
         }
     }
@@ -54,6 +56,15 @@ class Car_type extends Model
     public static function ChangeType(Request $request,$id){
         $series_id=Car_serie::ChangeSeries($request);
         $series_id=array('series_id'=>$series_id);
-        Car_type::where('id',$id)->update(array_merge($series_id,$request->except('brands','car_series')));
+        Car_type::where('id',$id)->update(array_merge($series_id,$request->except('brands','car_type')));
+    }
+
+    protected static function isSameType(Collection $collection,$id){
+        for($i=0;$i<$collection->count();$i++){
+            if($collection->get($i)->type_id==$id){
+                return true;
+            }
+        }
+        return false;
     }
 }
