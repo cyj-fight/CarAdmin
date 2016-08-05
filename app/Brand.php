@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Brand extends Model
 {
+    protected $table='brands';
     protected $fillable=['brands'];
     public function hasManySeries(){
         return $this->hasMany('App\Car_serie','brand_id','id');

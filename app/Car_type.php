@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Car_type extends Model
 {
+    protected $table='car_types';
     protected $fillable=['car_type','series_id','set_num','made_at','emission_standard'];
     public function belongsToSeries(){
         return $this->belongsTo('App\Car_serie','series_id');

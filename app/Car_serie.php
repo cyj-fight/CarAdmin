@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Car_serie extends Model
 {
+    protected $table='car_series';
     protected $fillable=['car_series','brand_id'];
     public function belongsToBrand(){
         return $this->belongsTo('App\Brand','brand_id');

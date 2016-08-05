@@ -6,6 +6,7 @@ class UserSeeder extends Seeder{
     public function run(){
         DB::table('users')->delete();
         User::create([
+            'id'=>1,
             'name'=>'root',
             'email'=>'admin@car.com',
             'password'=>Crypt::encrypt('123456'),
