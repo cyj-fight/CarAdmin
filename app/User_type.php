@@ -13,7 +13,7 @@ class User_type extends Model
     }
 
     public function hasOneType(){
-        return $this->hasMany('App\Car_type','id','type_id');
+        return $this->hasOne('App\Car_type','id','type_id');
     }
 
     public static function CreateNewRelation($user_id,$type_id){

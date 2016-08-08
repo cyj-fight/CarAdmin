@@ -14,7 +14,9 @@
 Route::get('/','FrontController@index');
 
 Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],function(){
-    Route::get('/','AdminHomeController@index');
+    Route::get('/','HomeController@index');
+    Route::resource('manager','Manager\ManageHomeController');
+    Route::resource('user','User\UserHomeController');
 });
 
 Route::get('auth/login','Auth\AuthController@getLogin');
