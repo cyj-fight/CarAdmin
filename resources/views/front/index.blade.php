@@ -1,12 +1,7 @@
-<html>
-<head>
-    <meta charset="utf-8" content="text/html">
-    <title>
-        test
-    </title>
-</head>
-<body>
-<a href="{{url('/new')}}">添加</a>
+@extends('layout.default')
+
+@section('content')
+<a href="{{url('auth/login')}}" methods="get">登录后台</a>
 <table border="1" style="border-color: #5e5e5e;border-style: inset">
     <tr>
         <td>
@@ -26,9 +21,6 @@
         </td>
         <td>
             排放标准
-        </td>
-        <td colspan="2">
-            操作
         </td>
     </tr>
     @foreach($brands as $brand)
@@ -53,16 +45,9 @@
                     <td>
                         {{$type->emission_standard}}
                     </td>
-                    <td>
-                        修改
-                    </td>
-                    <td>
-                        删除
-                    </td>
                 </tr>
             @endforeach
         @endforeach
     @endforeach
 </table>
-</body>
-</html>
+@endsection
