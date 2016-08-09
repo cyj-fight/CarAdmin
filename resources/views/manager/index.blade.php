@@ -2,6 +2,7 @@
 
 @section('content')
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
+    &nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url('auth/logout')}}">退出</a>
     <table border="1" style="border-color: #5e5e5e;border-style: inset">
         <tr>
             <td>

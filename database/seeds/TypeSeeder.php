@@ -20,6 +20,7 @@ class TypeSeeder extends Seeder{
                         'id'=>$sum,
                        'car_type'=>'type'.$k.'_series'.$j.'_brand'.$i,
                         'series_id'=>$ser_num,
+                        'user_id'=>1,
                         'set_num'=>$num,
                         'made_at'=>\Carbon\Carbon::now(),
                         'emission_standard'=>$std,

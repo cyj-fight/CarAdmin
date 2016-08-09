@@ -16,8 +16,9 @@ class CreateCarTypesTable extends Migration
             $table->increments('id');
             $table->string('car_type');
             $table->integer('series_id');
+            $table->integer('user_id');
             $table->integer('set_num');
-            $table->time('made_at');
+            $table->timestamp('made_at');
             $table->enum('emission_standard',['guo4','guo5']);
             $table->timestamps();
         });

@@ -41,12 +41,7 @@ class FrontController extends Controller
      */
     public function store(Request $request)
     {
-        $flag=Car_type::CreateNewType($request);
-        if($flag){
-            return Redirect::to('/')->withBrands(Brand::all());
-        }else{
-            return Redirect::back();
-        }
+
     }
 
     /**

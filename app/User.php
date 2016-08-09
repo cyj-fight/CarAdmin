@@ -38,6 +38,6 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     public function hasManyTypes(){
-        return $this->hasMany('App\User_type','user_id','id');
+        return $this->hasMany('App\Car_type','user_id','id');
     }
 }

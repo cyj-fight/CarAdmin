@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Car_type extends Model
 {
     protected $table='car_types';
-    protected $fillable=['car_type','series_id','set_num','made_at','emission_standard'];
+    protected $fillable=['car_type','series_id','user_id','set_num','made_at','emission_standard'];
     public function belongsToSeries(){
         return $this->belongsTo('App\Car_serie','series_id');
     }
@@ -34,7 +34,7 @@ class Car_type extends Model
             Car_type::create(array_merge($series_id, $request->except('brands', 'ar_series')));
             $type=Car_type::where('car_type',$request->get('car_type'))->get();
             $user=User::where('name',Auth::user())->get();
-            User_type::CreateNewRelation(1,$type->get('0')->id);//1  =>  $user->get('0')->id
+            User_type::CreateNewRelation(Auth::user()->id,$type->get('0')->id);//1  =>  $user->get('0')->id
             return true;
         }
     }

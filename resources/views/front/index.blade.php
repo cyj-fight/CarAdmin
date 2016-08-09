@@ -23,6 +23,7 @@
             排放标准
         </td>
     </tr>
+
     @foreach($brands as $brand)
         @foreach($brand->hasManySeries as $series)
             @foreach($series->hasManyTypes as $type)
