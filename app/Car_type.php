@@ -26,8 +26,8 @@ class Car_type extends Model
      */
     public static function CreateNewType(Request $request){
         $series_id=Car_serie::CreateNewSeries($request);
-        $type=Car_type::where('car_type',$request->get('car_type'))->get();
-        if((!$type->isEmpty())&&(Car_type::isSameType($type,$series_id))){
+        $type=Car_type::where('car_type',$request->get('car_type'))->where('series_id',$series_id)->get();
+        if(!$type->isEmpty()){
             return false;
         }else {
             $series_id=array('series_id'=>$series_id);

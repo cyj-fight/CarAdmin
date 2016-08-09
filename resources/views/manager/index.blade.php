@@ -2,7 +2,18 @@
 
 @section('content')
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
-    &nbsp;&nbsp;&nbsp;&nbsp;<a href="{{url('auth/logout')}}">退出</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{{url('auth/logout')}}">退出</a><hr/>
+    <a href="{{url('admin/manager/create')}}">新建</a><br/><br/>
+    <div>
+        <form method="post" action="{{url('admin/manager/select')}}">
+            <select name="brands">
+                @foreach($brands as $brand)
+                    <option value="{{$brand->brands}}">{{$brand->brands}}</option>
+                @endforeach
+            </select>
+        </form>
+    </div>
     <table border="1" style="border-color: #5e5e5e;border-style: inset">
         <tr>
             <td>
@@ -50,10 +61,14 @@
                             {{$type->emission_standard}}
                         </td>
                         <td>
-                            修改
+                            <a href="{{url('admin/manager/'.$type->id.'/edit')}}"><button>编辑</button></a>
                         </td>
                         <td>
-                            删除
+                            <form method="post" action="{{url('admin/manager/'.$type->id)}}">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" name="delete" value="删除">
+                            </form>
                         </td>
                     </tr>
                 @endforeach

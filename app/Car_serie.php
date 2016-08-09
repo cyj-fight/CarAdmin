@@ -20,8 +20,8 @@ class Car_serie extends Model
 
     public static function CreateNewSeries(Request $request){
         $brand_id=Brand::CreateNewBrand($request);
-        $series=Car_serie::where('car_series',$request->get('car_series'))->get();
-        if((!$series->isEmpty())&&(Car_serie::isSameSeries($series,$brand_id))){
+        $series=Car_serie::where('car_series',$request->get('car_series'))->where('brands_id',$brand_id)->get();
+        if(!$series->isEmpty()){
             return $series->get('0')->id;
         }else{
             $brand_id=array('brands_id'=>$brand_id);

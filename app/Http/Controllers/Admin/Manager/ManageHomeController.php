@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class ManageHomeController extends ManageController
 {
@@ -30,7 +31,7 @@ class ManageHomeController extends ManageController
      */
     public function create()
     {
-        //
+        return view('manager.create')->withUser(Auth::user());
     }
 
     /**
@@ -41,7 +42,21 @@ class ManageHomeController extends ManageController
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'brands'=>'required',
+            'car_series'=>'required',
+            'car_type'=>'required',
+            'set_num'=>'required',
+            'made_at'=>'required',
+            'emission_standard'=>'required',
+        ]);
+
+        $flag=Car_type::CreateNewType($request);
+        if($flag){
+            return Redirect::to('admin/manager')->withBrands(Brand::all());
+        }else{
+            return Redirect::back()->withInput->withErrors('车型添加失败');
+        }
     }
 
     /**
@@ -63,7 +78,7 @@ class ManageHomeController extends ManageController
      */
     public function edit($id)
     {
-        //
+        return view('manager.edit')->withType(Car_type::find($id))->withUser(Auth::user());
     }
 
     /**
@@ -75,7 +90,17 @@ class ManageHomeController extends ManageController
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'brands'=>'required',
+            'car_series'=>'required',
+            'car_type'=>'required',
+            'set_num'=>'required',
+            'made_at'=>'required',
+            'emission_standard'=>'required',
+        ]);
+        Car_type::ChangeType($request,$id);
+
+        return Redirect::to('admin/manager');
     }
 
     /**
@@ -86,6 +111,9 @@ class ManageHomeController extends ManageController
      */
     public function destroy($id)
     {
-        //
+        if(Car_type::DeleteType($id)){
+            return Redirect::back();
+        }
+        return Redirect::back()->withErroes('删除失败');
     }
 }
