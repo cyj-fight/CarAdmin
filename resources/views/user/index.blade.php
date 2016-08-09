@@ -2,7 +2,8 @@
 
 @section('content')
     这是用户界面主页
-    {{$user->name}}欢迎回来&nbsp;&nbsp;&nbsp;&nbsp;<a href={{url("auth/logout")}}>退出</a>
+    {{$user->name}}欢迎回来&nbsp;&nbsp;&nbsp;&nbsp;上次登录时间:{{$user->updated_at}}
+    <a href={{url("auth/logout")}}>退出</a>
     <hr/>
     @if($types->count()>0)
         <a href="{{url('admin/user/create')}}">新建</a>
@@ -51,10 +52,14 @@
                     {{$type->emission_standard}}
                 </td>
                 <td>
-                    <a href="{{url('admin/user/'.$type->id.'/edit')}}">编辑</a>
+                    <a href="{{url('admin/user/'.$type->id.'/edit')}}"><button>编辑</button></a>
                 </td>
                 <td>
-                    删除
+                    <form method="post" action="{{url('admin/user/'.$type->id)}}">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" name="delete" value="删除">
+                    </form>
                 </td>
             </tr>
             @endforeach
