@@ -34,9 +34,9 @@ class Car_serie extends Model
 
     public static function ChangeSeries(Request $request){
         $brand_id=Brand::ChangeBrand($request);
-        $series=where('car_series',$request->get('car_series'))->get();
-        if((!$series->isEmpty())&&($series->get('0')->brands_id==$brand_id)){
-                return $series->id;
+        $series=Car_serie::where('car_series',$request->get('car_series'))->where('brands_id',$brand_id)->get();
+        if((!$series->isEmpty())){
+                return $series->get('0')->id;
         }else{
             $brand_id=array('brand_id'=>$brand_id);
             Car_serie::create(array_merge($brand_id,$request->get('car_series')));

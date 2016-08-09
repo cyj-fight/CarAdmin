@@ -51,7 +51,7 @@
                     {{$type->emission_standard}}
                 </td>
                 <td>
-                    编辑
+                    <a href="{{url('admin/user/'.$type->id.'/edit')}}">编辑</a>
                 </td>
                 <td>
                     删除

@@ -80,7 +80,7 @@ class UserHomeController extends UserController
      */
     public function edit($id)
     {
-        //
+        return view('user.edit')->withType(Car_type::find($id))->withUser(Auth::user());
     }
 
     /**
@@ -92,7 +92,17 @@ class UserHomeController extends UserController
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'brands'=>'required',
+            'car_series'=>'required',
+            'car_type'=>'required',
+            'set_num'=>'required',
+            'made_at'=>'required',
+            'emission_standard'=>'required',
+        ]);
+        Car_type::ChangeType($request,$id);
+
+        return Redirect::to('admin/user');
     }
 
     /**

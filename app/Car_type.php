@@ -20,7 +20,7 @@ class Car_type extends Model
     }
 
     /**
-     * 新建车型     ！！！！存在问题：时间不对
+     * 新建车型
      * @param Request $request
      * @return bool
      */
@@ -53,10 +53,15 @@ class Car_type extends Model
         }
     }
 
+    /**
+     * 修改车型信息
+     * @param Request $request
+     * @param $id
+     */
     public static function ChangeType(Request $request,$id){
         $series_id=Car_serie::ChangeSeries($request);
         $series_id=array('series_id'=>$series_id);
-        Car_type::where('id',$id)->update(array_merge($series_id,$request->except('brands','car_type')));
+        Car_type::where('id',$id)->update(array_merge($series_id,$request->except('brands','car_series','_method','_token')));
     }
 
     protected static function isSameType(Collection $collection,$id){
