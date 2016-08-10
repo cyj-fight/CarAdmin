@@ -21,7 +21,8 @@ class ManageHomeController extends ManageController
      */
     public function index()
     {
-        return view('manager.index')->withBrands(Brand::all());
+        //dd(Car_type::SelectTypes());
+        return view('manager.index')->withTypes(Car_type::SelectTypes());
     }
 
     /**
@@ -116,4 +117,17 @@ class ManageHomeController extends ManageController
         }
         return Redirect::back()->withErroes('删除失败');
     }
+
+    public function getSelect(){
+        //dd(Car_type::SelectTypes($request));
+        return view('manager.select');
+
+    }
+
+    public function postSelect(Request $request){
+        //dd(Car_type::SelectTypes($request));
+        return Redirect::back()->withInput()->withTypes(Car_type::SelectTypes($request));
+
+    }
+
 }

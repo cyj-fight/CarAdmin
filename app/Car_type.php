@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Car_type extends Model
 {
@@ -71,5 +72,38 @@ class Car_type extends Model
             }
         }
         return false;
+    }
+
+    public static function SelectTypes(Request $request=null){
+        /*if($request->get('car_type')==null){
+            $types=Car_type::all();
+        }else
+        {
+            $types=Car_type::where('car_type',$request->get('car_type'));
+        }*/
+        $types=DB::table('car_series')
+            ->join('brands','car_series.brands_id','=','brands.id')
+            ->join('car_types','car_series.id','=','car_types.series_id');
+            //->where('brands.brands',$brands);
+            //->where('car_series.car_series','=',$series)
+            //->where('car_types.car_type','=',$type)
+            //->where('car_types.emission_standard','=',$request->get('emission_standard'))
+            //->get();
+        if($request!=null){
+            if($request->get('brands')!='null')
+            {
+                $types=$types->where('brands.brands',$request->get('brands'));
+            }
+
+            if($request->get('car_series')!='null'){
+                $types=$types->where('car_series.car_series',$request->get('car_series'));
+            }
+            if($request->get('car_type')!='null'){
+                $types=$types->where('car_types.car_type',$request->get('car_type'));
+            }
+        }
+        $types=$types->get();
+        //dd($types);
+        return $types;
     }
 }

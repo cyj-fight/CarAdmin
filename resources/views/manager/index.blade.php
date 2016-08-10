@@ -4,16 +4,18 @@
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a href="{{url('auth/logout')}}">退出</a><hr/>
-    <a href="{{url('admin/manager/create')}}">新建</a><br/><br/>
-    <div>
-        <form method="post" action="{{url('admin/manager/select')}}">
-            <select name="brands">
-                @foreach($brands as $brand)
-                    <option value="{{$brand->brands}}">{{$brand->brands}}</option>
-                @endforeach
-            </select>
-        </form>
-    </div>
+    <a href="{{url('admin/manager/create')}}">新建</a>
+    <a href="{{url('admin/manager/select')}}">查询</a>
+    <br/><br/>
+    <form method="post" action="{{url('admin/manager/select')}}">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        品牌：<input type="text" name="brands" value="null">
+        车系：<input type="text" name="car_series" value="null">
+        车型：<input type="text" name="car_type" value="null">
+        排放标准:<input type="radio" name="emission_standard" value="1">国4
+        <input type="radio" name="emission_standard" value="2">国5
+        <input type="submit" value="查询">
+    </form>
     <table border="1" style="border-color: #5e5e5e;border-style: inset">
         <tr>
             <td>
@@ -38,15 +40,13 @@
                 操作
             </td>
         </tr>
-        @foreach($brands as $brand)
-            @foreach($brand->hasManySeries as $series)
-                @foreach($series->hasManyTypes as $type)
+        @foreach($types as $type)
                     <tr>
                         <td>
-                            {{$brand->brands}}
+                            {{$type->brands}}
                         </td>
                         <td>
-                            {{$series->car_series}}
+                            {{$type->car_series}}
                         </td>
                         <td>
                             {{$type->car_type}}
@@ -71,8 +71,6 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
-            @endforeach
         @endforeach
     </table>
 @endsection

@@ -53,4 +53,24 @@ class Car_serie extends Model
         }
         return false;
     }
+
+    public static function SelectSeries(Request $request){
+        $brands=Brand::SelectBrands($request);
+        if($brands->count()>1){
+            //$series=Car_serie::all();
+            if($request->get('car_series')==null){
+                $series=Car_serie::all();
+            }else{
+                $series=Car_serie::where('car_series',$request->get('car_series'))->get();
+            }
+        }else{
+            //$series=Car_serie::where('brand_id',$brands->get('0')->id);
+            if($request->get('car_series')==null){
+                $series=Car_serie::where('brand_id',$brands->get('0')->id)->get();
+            }else{
+                $series=Car_serie::where('brand_id',$brands->get('0')->id)->where('car_series',$request->get('car_series'))->get();
+            }
+        }
+        return $series;
+    }
 }
