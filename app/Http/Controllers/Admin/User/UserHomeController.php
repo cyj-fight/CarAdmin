@@ -113,10 +113,12 @@ class UserHomeController extends UserController
      */
     public function destroy($id)
     {
-        $type=Car_type::findOrFail($id);
-        $record=User_type::where('type_id',$id)->first();
-        $record->delete();
-        $type->delete();
+        if($type=Car_type::where('user_id',Auth::user()->id)->find($id)){
+            $record=User_type::where('type_id',$id)->first();
+            $record->delete();
+            $type->delete();
+            return Redirect::back();
+        }
         return Redirect::back();
     }
 }

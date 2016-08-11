@@ -38,9 +38,11 @@ class Car_serie extends Model
         if((!$series->isEmpty())){
                 return $series->get('0')->id;
         }else{
-            $brand_id=array('brand_id'=>$brand_id);
-            Car_serie::create(array_merge($brand_id,$request->get('car_series')));
-            $series=Car_serie::where('car_series',$request->get('car_series'))->get();
+            $brand_id=array('brands_id'=>$brand_id);
+            $car_series=array('car_series'=>$request->get('car_series'));
+            Car_serie::create(array_merge($brand_id,$car_series));
+            $series=Car_serie::where('car_series',$request->get('car_series'))
+                ->where('brands_id',$brand_id)->get();
             return $series->get('0')->id;
         }
     }
