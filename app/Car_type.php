@@ -101,6 +101,18 @@ class Car_type extends Model
             if($request->get('car_type')!='null'){
                 $types=$types->where('car_types.car_type',$request->get('car_type'));
             }
+            if($request->get('emission_standard')){
+                $standard=$request->get('emission_standard');
+                if($standard=='1'){
+                    $standard='guo4';
+                }
+                if($standard=='2'){
+                    $standard='guo5';
+                }
+                $types=$types->where('emission_standard','=',$standard);
+                //$types=$types->get();
+                //dd($standard);
+            }
         }
         $types=$types->get();
         //dd($types);

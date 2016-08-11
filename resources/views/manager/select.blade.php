@@ -35,10 +35,10 @@
                 @foreach($types as $type)
                     <tr>
                         <td>
-                            {{$type->belongsToSeries->belongsToBrand->brands}}
+                            {{$type->brands}}
                         </td>
                         <td>
-                            {{$type->belongsToSeries->car_series}}
+                            {{$type->car_series}}
                         </td>
                         <td>
                             {{$type->car_type}}

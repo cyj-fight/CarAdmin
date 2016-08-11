@@ -126,7 +126,7 @@ class ManageHomeController extends ManageController
 
     public function postSelect(Request $request){
         //dd(Car_type::SelectTypes($request));
-        return Redirect::back()->withInput()->withTypes(Car_type::SelectTypes($request));
+        return view('manager.select')->withTypes(Car_type::SelectTypes($request));
 
     }
 
