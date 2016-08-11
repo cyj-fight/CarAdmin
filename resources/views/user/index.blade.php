@@ -3,7 +3,8 @@
 @section('content')
     这是用户界面主页
     {{$user->name}}欢迎回来&nbsp;&nbsp;&nbsp;&nbsp;上次登录时间:{{$user->updated_at}}
-    <a href={{url("auth/logout")}}>退出</a>
+    <a href={{url("auth/logout")}}>退出</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="{{url('password/email')}}" methods="get">修改密码</a>
     <hr/>
     @if($types->count()>0)
         <a href="{{url('admin/user/create')}}">新建</a>

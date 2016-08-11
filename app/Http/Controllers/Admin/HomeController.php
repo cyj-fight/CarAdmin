@@ -27,7 +27,7 @@ class HomeController extends Controller
                 return Redirect::to('admin/user');
                 break;
             default:
-                return Redirect::to('admin/logout');
+                return Redirect::to('auth/logout');
         }
     }
 
