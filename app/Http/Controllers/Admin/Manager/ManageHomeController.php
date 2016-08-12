@@ -118,15 +118,9 @@ class ManageHomeController extends ManageController
         return Redirect::back()->withErroes('删除失败');
     }
 
-    public function getSelect(){
-        //dd(Car_type::SelectTypes($request));
-        return view('manager.select');
-
-    }
-
     public function postSelect(Request $request){
         //dd(Car_type::SelectTypes($request));
-        return view('manager.select')->withTypes(Car_type::SelectTypes($request));
+        return view('manager.index')->withTypes(Car_type::SelectTypes($request));
 
     }
 

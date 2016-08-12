@@ -2,13 +2,13 @@
 
 @section('content')
     @if(count($errors)>0)
-            <div class="alert alert-danger">
-                @foreach($errors->all() as $error)
-                    <div class="alert-danger">
-                        {{$error}}
-                    </div>
-                @endforeach
-            </div>
+        <div class="alert alert-danger">
+            @foreach($errors->all() as $error)
+                <div class="alert-danger">
+                    {{$error}}
+                </div>
+            @endforeach
+        </div>
     @endif
 <form method="post" action="{{url('auth/login')}}">
     <input type="hidden" name="_token" value="{{csrf_token()}}">

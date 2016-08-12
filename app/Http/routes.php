@@ -15,10 +15,16 @@ Route::get('/','FrontController@index');
 
 Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],function(){
     Route::get('/home','HomeController@index');
-    Route::get('manager/select','Manager\ManageHomeController@getSelect');
+
     Route::post('manager/select','Manager\ManageHomeController@postSelect');
     Route::resource('manager','Manager\ManageHomeController');
     Route::resource('user','User\UserHomeController');
+
+    Route::get('password/email','User\PasswordController@getEmail');
+    Route::post('password/email','User\PasswordController@postEmail');
+
+    Route::get('password/reset/{token}','User\PasswordController@getReset');
+    Route::post('password/reset','User\PasswordController@postReset');
 });
 
 Route::get('password/email','Auth\PasswordController@getEmail');
