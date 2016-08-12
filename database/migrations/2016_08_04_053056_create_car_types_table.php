@@ -14,10 +14,11 @@ class CreateCarTypesTable extends Migration
     {
         Schema::create('car_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('car_type');
-            $table->integer('series_id');
+            $table->string('brand');
+            $table->string('series');
+            $table->string('type');
             $table->integer('user_id');
-            $table->integer('set_num');
+            $table->integer('seat_num');
             $table->timestamp('made_at');
             $table->enum('emission_standard',['guo4','guo5']);
             $table->timestamps();

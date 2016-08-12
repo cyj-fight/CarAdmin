@@ -32,19 +32,19 @@
                     操作
                 </td>
             </tr>
-            @foreach($user->hasManyTypes as $type)
+            @foreach($types as $type)
             <tr>
                 <td>
-                   {{$type->belongsToSeries->belongsToBrand->brands}}
+                   {{$type->brand}}
                 </td>
                 <td>
-                    {{$type->belongsToSeries->car_series}}
+                    {{$type->series}}
                 </td>
                 <td>
-                    {{$type->car_type}}
+                    {{$type->type}}
                 </td>
                 <td>
-                    {{$type->set_num}}
+                    {{$type->seat_num}}
                 </td>
                 <td>
                     {{$type->made_at}}

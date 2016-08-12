@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class Car_type extends Model
 {
     protected $table='car_types';
-    protected $fillable=['car_type','series_id','user_id','set_num','made_at','emission_standard'];
+    protected $fillable=['brand','series','type','user_id','seat_num','made_at','emission_standard'];
     public function belongsToSeries(){
         return $this->belongsTo('App\Car_serie','series_id');
     }
@@ -26,16 +26,14 @@ class Car_type extends Model
      * @return bool
      */
     public static function CreateNewType(Request $request){
-        $series_id=Car_serie::CreateNewSeries($request);
-        $type=Car_type::where('car_type',$request->get('car_type'))->where('series_id',$series_id)->get();
+        $type=Car_type::where('type',$request->get('type'))
+            ->where('brand',$request->get('brand'))
+            ->where('series',$request->get('series'))
+            ->get();
         if(!$type->isEmpty()){
             return false;
         }else {
-            $series_id=array('series_id'=>$series_id);
-            Car_type::create(array_merge($series_id, $request->except('brands', 'ar_series')));
-            $type=Car_type::where('car_type',$request->get('car_type'))->get();
-            $user=User::where('name',Auth::user())->get();
-            User_type::CreateNewRelation(Auth::user()->id,$type->get('0')->id);//1  =>  $user->get('0')->id
+            Car_type::create( $request->all());
             return true;
         }
     }
@@ -60,18 +58,8 @@ class Car_type extends Model
      * @param $id
      */
     public static function ChangeType(Request $request,$id){
-        $series_id=Car_serie::ChangeSeries($request);
-        $series_id=array('series_id'=>$series_id);
-        Car_type::where('id',$id)->update(array_merge($series_id,$request->except('brands','car_series','_method','_token')));
-    }
-
-    protected static function isSameType(Collection $collection,$id){
-        for($i=0;$i<$collection->count();$i++){
-            if($collection->get($i)->type_id==$id){
-                return true;
-            }
-        }
-        return false;
+        //dd(Car_type::where('id',$id)->get());
+        Car_type::where('id',$id)->update($request->except('user_id','_method','_token'));
     }
 
     public static function SelectTypes(Request $request=null){
@@ -81,25 +69,23 @@ class Car_type extends Model
         {
             $types=Car_type::where('car_type',$request->get('car_type'));
         }*/
-        $types=DB::table('car_series')
-            ->join('brands','car_series.brands_id','=','brands.id')
-            ->join('car_types','car_series.id','=','car_types.series_id');
+        $types=DB::table('car_types');
             //->where('brands.brands',$brands);
             //->where('car_series.car_series','=',$series)
             //->where('car_types.car_type','=',$type)
             //->where('car_types.emission_standard','=',$request->get('emission_standard'))
             //->get();
         if($request!=null){
-            if($request->get('brands')!='null')
+            if($request->get('brand')!='null')
             {
-                $types=$types->where('brands.brands',$request->get('brands'));
+                $types=$types->where('brand',$request->get('brand'));
             }
 
-            if($request->get('car_series')!='null'){
-                $types=$types->where('car_series.car_series',$request->get('car_series'));
+            if($request->get('series')!='null'){
+                $types=$types->where('series',$request->get('series'));
             }
-            if($request->get('car_type')!='null'){
-                $types=$types->where('car_types.car_type',$request->get('car_type'));
+            if($request->get('type')!='null'){
+                $types=$types->where('type',$request->get('type'));
             }
             if($request->get('emission_standard')){
                 $standard=$request->get('emission_standard');

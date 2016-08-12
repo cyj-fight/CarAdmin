@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
 
          //$this->call(UserTableSeeder::class);
         $this->call('TypeSeeder');
-        $this->call('UserSeeder');
-        $this->call('BrandsSeeder');
-        $this->call('SeriesSeeder');
-        $this->call('UserTypeSeeder');
+        //$this->call('UserSeeder');
+        //$this->call('BrandsSeeder');
+        //$this->call('SeriesSeeder');
+        //$this->call('UserTypeSeeder');
         Model::reguard();
     }
 }

@@ -4,10 +4,10 @@
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="user_id" value="{{$user->id}}">
-        Brand:<input type="text" name=" brands" value="{{$type->belongsToSeries->belongsToBrand->brands}}"><br/>
-        Series:<input type="text" name="car_series" value="{{$type->belongsToSeries->car_series}}"><br/>
-        Type:<input type="text" name="car_type" value="{{$type->car_type}}"><br/>
-        Set-Num:<input type="number" name="set_num" value="{{$type->set_num}}"><br/>
+        Brand:<input type="text" name=" brand" value="{{$type->brand}}"><br/>
+        Series:<input type="text" name="series" value="{{$type->series}}"><br/>
+        Type:<input type="text" name="type" value="{{$type->type}}"><br/>
+        Set-Num:<input type="number" name="seat_num" value="{{$type->seat_num}}"><br/>
         Made-At:<input type="date" name="made_at" value="{{date("Y-m-d",strtotime($type->made_at))}}"><br/>
         Emission-Standard:
         @if($type->emission_standard=='guo4')

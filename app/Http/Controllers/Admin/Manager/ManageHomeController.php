@@ -44,19 +44,19 @@ class ManageHomeController extends ManageController
     public function store(Request $request)
     {
         $this->validate($request,[
-            'brands'=>'required',
-            'car_series'=>'required',
-            'car_type'=>'required',
-            'set_num'=>'required',
+            'brand'=>'required',
+            'series'=>'required',
+            'type'=>'required',
+            'seat_num'=>'required',
             'made_at'=>'required',
             'emission_standard'=>'required',
         ]);
 
         $flag=Car_type::CreateNewType($request);
         if($flag){
-            return Redirect::to('admin/manager')->withBrands(Brand::all());
+            return Redirect::to('admin/manager')->withTypes(Car_type::all());
         }else{
-            return Redirect::back()->withInput->withErrors('车型添加失败');
+            return Redirect::back()->withErrors('车型添加失败');
         }
     }
 
@@ -92,10 +92,10 @@ class ManageHomeController extends ManageController
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'brands'=>'required',
-            'car_series'=>'required',
-            'car_type'=>'required',
-            'set_num'=>'required',
+            'brand'=>'required',
+            'series'=>'required',
+            'type'=>'required',
+            'seat_num'=>'required',
             'made_at'=>'required',
             'emission_standard'=>'required',
         ]);

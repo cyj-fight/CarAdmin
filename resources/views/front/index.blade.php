@@ -24,21 +24,19 @@
         </td>
     </tr>
 
-    @foreach($brands as $brand)
-        @foreach($brand->hasManySeries as $series)
-            @foreach($series->hasManyTypes as $type)
+    @foreach($types as $type)
                 <tr>
                     <td>
-                        {{$brand->brands}}
+                        {{$type->brand}}
                     </td>
                     <td>
-                        {{$series->car_series}}
+                        {{$type->series}}
                     </td>
                     <td>
-                        {{$type->car_type}}
+                        {{$type->type}}
                     </td>
                     <td>
-                        {{$type->set_num}}
+                        {{$type->seat_num}}
                     </td>
                     <td>
                         {{$type->made_at}}
@@ -47,8 +45,6 @@
                         {{$type->emission_standard}}
                     </td>
                 </tr>
-            @endforeach
-        @endforeach
     @endforeach
 </table>
 @endsection

@@ -3,8 +3,10 @@
 @section('content')
     @if(count($errors)>0)
             <div class="alert alert-danger">
-                @foreach($errors as $error)
-                    {{$error}}
+                @foreach($errors->all() as $error)
+                    <div class="alert-danger">
+                        {{$error}}
+                    </div>
                 @endforeach
             </div>
     @endif
@@ -14,5 +16,6 @@
     密码:<input type="password" name="password"><br/>
     <input type="submit" value="登录">
     <a href="{{url('auth/register')}}" methods="get">注册</a>
+    <label> </label><a href="{{url('password/email')}}">忘记密码？</a>
 </form>
 @endsection

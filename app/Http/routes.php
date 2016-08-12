@@ -21,13 +21,11 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     Route::resource('user','User\UserHomeController');
 });
 
-Route::group(['prefix'=>'password','namespace'=>'Auth','middleware'=>'auth'],function(){
-    Route::get('email','PasswordController@getEmail');
-    Route::post('email','PasswordController@postEmail');
+Route::get('password/email','Auth\PasswordController@getEmail');
+Route::post('password/email','Auth\PasswordController@postEmail');
 
-    Route::get('reset/{token}','PasswordController@getReset');
-    Route::post('reset','PasswordController@postReset');
-});
+Route::get('password/reset/{token}','Auth\PasswordController@getReset');
+Route::post('password/reset','Auth\PasswordController@postReset');
 
 Route::get('auth/login','Auth\AuthController@getLogin');
 Route::post('auth/login','Auth\AuthController@postLogin');

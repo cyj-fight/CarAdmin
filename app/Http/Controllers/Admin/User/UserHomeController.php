@@ -23,7 +23,7 @@ class UserHomeController extends UserController
     public function index()
     {
         //dd(User_type::where('user_id',Auth::user()->id)->get());
-        return view('user.index')->withUser(Auth::user())->withTypes(User_type::where('user_id',Auth::user()->id)->get());
+        return view('user.index')->withUser(Auth::user())->withTypes(Car_type::where('user_id',Auth::user()->id)->get());
     }
 
     /**
@@ -45,17 +45,17 @@ class UserHomeController extends UserController
     public function store(Request $request)
     {
         $this->validate($request,[
-           'brands'=>'required',
-            'car_series'=>'required',
-            'car_type'=>'required',
-            'set_num'=>'required',
+           'brand'=>'required',
+            'series'=>'required',
+            'type'=>'required',
+            'seat_num'=>'required',
             'made_at'=>'required',
             'emission_standard'=>'required',
         ]);
 
         $flag=Car_type::CreateNewType($request);
         if($flag){
-            return Redirect::to('admin/user')->withBrands(Brand::all());
+            return Redirect::to('admin/user')->withTypes(Car_type::all());
         }else{
             return Redirect::back()->withInput->withErrors('车型添加失败');
         }
@@ -93,10 +93,10 @@ class UserHomeController extends UserController
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'brands'=>'required',
-            'car_series'=>'required',
-            'car_type'=>'required',
-            'set_num'=>'required',
+            'brand'=>'required',
+            'series'=>'required',
+            'type'=>'required',
+            'seat_num'=>'required',
             'made_at'=>'required',
             'emission_standard'=>'required',
         ]);
@@ -114,8 +114,6 @@ class UserHomeController extends UserController
     public function destroy($id)
     {
         if($type=Car_type::where('user_id',Auth::user()->id)->find($id)){
-            $record=User_type::where('type_id',$id)->first();
-            $record->delete();
             $type->delete();
             return Redirect::back();
         }
