@@ -22,7 +22,7 @@ class UserHomeController extends UserController
      */
     public function index()
     {
-        //dd(User_type::where('user_id',Auth::user()->id)->get());
+        //dd(User_type::where('user_id',Auth::user()->id)->get()->count());
         return view('user.index')->withUser(Auth::user())->withTypes(Car_type::where('user_id',Auth::user()->id)->get());
     }
 
@@ -57,7 +57,7 @@ class UserHomeController extends UserController
         if($flag){
             return Redirect::to('admin/user')->withTypes(Car_type::all());
         }else{
-            return Redirect::back()->withInput->withErrors('车型添加失败');
+            return Redirect::back()->withErrors('车型添加失败');
         }
     }
 

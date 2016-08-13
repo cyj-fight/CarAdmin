@@ -35,13 +35,13 @@
             @foreach($types as $type)
             <tr>
                 <td>
-                   {{$type->brand}}
+                   {{$type->getBrand($type->type)}}
                 </td>
                 <td>
-                    {{$type->series}}
+                    {{$type->getSeries($type->type)}}
                 </td>
                 <td>
-                    {{$type->type}}
+                    {{$type->getType($type->type)}}
                 </td>
                 <td>
                     {{$type->seat_num}}
