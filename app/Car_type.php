@@ -173,6 +173,7 @@ class Car_type extends Model
         $types=DB::table('car_types')->get();
         foreach($types as $type){
             $flag=true;
+            $result=array();
             if($request!=null){
                 $arr=explode('_',$type->type);
                 $car_type=$arr[0];
@@ -182,18 +183,17 @@ class Car_type extends Model
                 $car_series=$arr[0];
                 $brand_id=(int)$arr[1];
                 $brand=Car_type::find($brand_id);
-
-                if($request->get('brand')!='null')
+                $emission_standard=$type->emission_standard;
+                if($request->get('brand')!='null'&&$brand!=$request->get('brand'))
                 {
-
-                    $types=$types->where('brand',$request->get('brand'));
+                        $flag=false;
                 }
 
-                if($request->get('series')!='null'){
-                    $types=$types->where('series',$request->get('series'));
+                if($request->get('series')!='null'&&$car_series!=$request->get('series')){
+                    $flag=false;
                 }
-                if($request->get('type')!='null'){
-                    $types=$types->where('type',$request->get('type'));
+                if($request->get('type')!='null'&&$car_type!=$request->get('type')){
+                    $flag=false;
                 }
                 if($request->get('emission_standard')){
                     $standard=$request->get('emission_standard');
@@ -203,12 +203,18 @@ class Car_type extends Model
                     if($standard=='2'){
                         $standard='guo5';
                     }
+                    if($emission_standard!=$standard){
+                        $flag=false;
+                    }
                     $types=$types->where('emission_standard','=',$standard);
                     //$types=$types->get();
                     //dd($standard);
                 }
             }
+            if($flag==true){
+                $result[]=$type;
+            }
         }
-        return $types;
+        return $result;
     }
 }

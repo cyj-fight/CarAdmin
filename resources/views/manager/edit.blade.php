@@ -5,7 +5,7 @@
         <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="user_id" value="{{$user->id}}">
         Brand:<input type="text" name=" brand" value="{{$type->getBrand($type->type)}}"><br/>
-        Series:<input type="text" name="series" value="{{$type->getSeries($type->series)}}"><br/>
+        Series:<input type="text" name="series" value="{{$type->getSeries($type->type)}}"><br/>
         Type:<input type="text" name="type" value="{{$type->getType($type->type)}}"><br/>
         Set-Num:<input type="number" name="seat_num" value="{{$type->seat_num}}"><br/>
         Made-At:<input type="date" name="made_at" value="{{date("Y-m-d",strtotime($type->made_at))}}"><br/>
