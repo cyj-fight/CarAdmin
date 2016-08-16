@@ -1,6 +1,7 @@
 @extends('layout.default')
 
 @section('content')
+    <?php use App\Car_type;?>
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a href="{{url('auth/logout')}}">退出</a><hr/>
@@ -43,13 +44,13 @@
         @foreach($types as $type)
                     <tr>
                         <td>
-                            {{$type->getBrand($type->type)}}
+                            {{Car_type::getBrand($type->type)}}
                         </td>
                         <td>
-                            {{$type->getSeries($type->type)}}
+                            {{Car_type::getSeries($type->type)}}
                         </td>
                         <td>
-                            {{$type->getType($type->type)}}
+                            {{Car_type::getType($type->type)}}
                         </td>
                         <td>
                             {{$type->seat_num}}

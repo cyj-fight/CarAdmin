@@ -12,27 +12,27 @@ class Car_type extends Model
 {
     protected $table='car_types';
     protected $fillable=['brand','series','type','user_id','seat_num','made_at','emission_standard'];
-    public function getSeries($str){
-        $id=(int)$this->getID($str);
+    public static function getSeries($str){
+        $id=(int)Car_type::getID($str);
         //dd($id);
         $series=Car_type::find($id)->series;
         $arr=explode('_',$series);
         return $arr[0];
     }
 
-    public function getBrand($str){
-        $id=(int)$this->getID($str);
+    public static function getBrand($str){
+        $id=(int)Car_type::getID($str);
         $series=Car_type::find($id)->series;
-        $id=(int)$this->getID($series);
+        $id=(int)Car_type::getID($series);
         $brand=Car_type::find($id)->brand;
         return $brand;
     }
 
-    public function getType($str){
+    public static function getType($str){
         $arr=explode('_',$str);
         return $arr[0];
     }
-    public function getID($str){
+    public static function getID($str){
         $arr=explode('_',$str);
         return $arr[1];
     }
@@ -54,7 +54,7 @@ class Car_type extends Model
             }
             $series=$request->get('series').'_'.$brand_id;
             Car_type::create(array('series'=>$series));
-            $series_id=$brand_id;
+            $series_id=++$brand_id;
             $type=$request->get('type').'_'.$series_id;
             Car_type::create(array_merge(array('type'=>$type),$request->except(['_method','brand','series','type'])));
             return true;
@@ -136,24 +136,13 @@ class Car_type extends Model
 
 
 
-        /*$types=DB::table('car_types');
+        /*$types=Car_type::where('type','<>','');
             //->where('brands.brands',$brands);
             //->where('car_series.car_series','=',$series)
             //->where('car_types.car_type','=',$type)
             //->where('car_types.emission_standard','=',$request->get('emission_standard'))
             //->get();
         if($request!=null){
-            if($request->get('brand')!='null')
-            {
-                $types=$types->where('brand',$request->get('brand'));
-            }
-
-            if($request->get('series')!='null'){
-                $types=$types->where('series',$request->get('series'));
-            }
-            if($request->get('type')!='null'){
-                $types=$types->where('type',$request->get('type'));
-            }
             if($request->get('emission_standard')){
                 $standard=$request->get('emission_standard');
                 if($standard=='1'){
@@ -166,25 +155,65 @@ class Car_type extends Model
                 //$types=$types->get();
                 //dd($standard);
             }
+
+            if($request->get('type')!='null'){
+                $types=$types->where('type','like',$request->get('type').'%');
+            }
+
+            if($request->get('series')!='null'){
+                $series=Car_type::where('series','like',$request->get('series').'%')->get();
+                if(!$series->isEmpty()){
+                    $temp=DB::table('car_types')->where('type','<>','');
+                    foreach($series as $car_series){
+                        $temp=$temp->orwhere('type','like','%'.$car_series->id);
+                    }
+                    $types=$types->where($temp);
+                }else{
+                    $types=$types->where('user_id','<',0);
+                }
+            }
+
+            if($request->get('brand')!='null')
+            {
+                $brand=Car_type::where('brand',$request->get('brand'))->first();
+                if(count((array)$brand)<1){
+
+                    $types=$types->where('user_id','<',0);
+                }else{
+                    $series=Car_type::where('series','like','%'.$brand->id)->get();
+                    //dd($series);
+                    if(!$series->isEmpty()){
+                        //$temp=DB::table('car_types')->where('type','<>','');
+                        foreach($series as $car_series){
+                            //$temp=$temp->orwhere('type','like','%'.$car_series->id);
+                            $types=$types->orwhere('type','like','%'.$car_series->id);
+                        }
+                    }else{
+                        $types=$types->where('user_id','<',0);
+                    }
+                }
+            }
         }
+
         $types=$types->get();*/
         //dd($types);
 
-        $types=DB::table('car_types')->get();
+        $types=DB::table('car_types')->where('type','<>','')->get();
+        $result=collect();
         foreach($types as $type){
             $flag=true;
-            $result=array();
             if($request!=null){
                 $arr=explode('_',$type->type);
                 $car_type=$arr[0];
-                $series_id=(int)$arr[1];
+                $series_id=(int)$arr['1'];
                 $series=Car_type::find($series_id);
-                $arr=explode('_',$series);
+                $arr=explode('_',$series->series);
                 $car_series=$arr[0];
                 $brand_id=(int)$arr[1];
                 $brand=Car_type::find($brand_id);
+                //var_dump($brand);
                 $emission_standard=$type->emission_standard;
-                if($request->get('brand')!='null'&&$brand!=$request->get('brand'))
+                if($request->get('brand')!='null'&&$brand->brand!=$request->get('brand'))
                 {
                         $flag=false;
                 }
@@ -211,8 +240,11 @@ class Car_type extends Model
                     //dd($standard);
                 }
             }
+            //var_dump($flag);
             if($flag==true){
-                $result[]=$type;
+                //var_dump($type);
+                //echo '<br/>';
+                $result->prepend($type);
             }
         }
         return $result;
