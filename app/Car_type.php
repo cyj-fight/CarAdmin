@@ -11,30 +11,17 @@ use Illuminate\Support\Facades\DB;
 class Car_type extends Model
 {
     protected $table='car_types';
-    protected $fillable=['brand','series','type','user_id','seat_num','made_at','emission_standard'];
-    public static function getSeries($str){
-        $id=(int)Car_type::getID($str);
+    protected $fillable=['name','parent_id','level','user_id','seat_num','made_at','emission_standard'];
+    public static function getSeries($id){
+        $series=Car_type::where('level',2)->find($id);
         //dd($id);
-        $series=Car_type::find($id)->series;
-        $arr=explode('_',$series);
-        return $arr[0];
+        return $series;
     }
 
-    public static function getBrand($str){
-        $id=(int)Car_type::getID($str);
-        $series=Car_type::find($id)->series;
-        $id=(int)Car_type::getID($series);
-        $brand=Car_type::find($id)->brand;
+    public static function getBrand($id){
+        $series=Car_type::getSeries($id);
+        $brand=Car_type::where('level',1)->find($series->parent_id);
         return $brand;
-    }
-
-    public static function getType($str){
-        $arr=explode('_',$str);
-        return $arr[0];
-    }
-    public static function getID($str){
-        $arr=explode('_',$str);
-        return $arr[1];
     }
 
     /**
@@ -44,41 +31,58 @@ class Car_type extends Model
      */
     public static function CreateNewType(Request $request){
         //先查brand
-        $brand_id=0;
-        $brand=Car_type::where('brand',$request->get('brand'));
+        $brand=Car_type::where('level','=',1)->where('name',$request->get('brand'));
         if($brand->get()->isEmpty()){//brand不存在,直接插入新记录
-            Car_type::create(array('brand'=>$request->get('brand')));
-            if(!Car_type::orderBy('id','asc')->get()->isEmpty())
-            {
-                $brand_id=Car_type::orderBy('id','asc')->get()->last()->id;
-            }
-            $series=$request->get('series').'_'.$brand_id;
-            Car_type::create(array('series'=>$series));
+            //新建brand
+            Car_type::create(array(
+                'name'=>$request->get('brand'),
+                'parent_id'=>0,
+                'level'=>1,
+            ));
+            $brand_id=Car_type::where('level','=',1)->where('name',$request->get('brand'))->first()->id;
+            //新建series
+            Car_type::create(array(
+                'name'=>$request->get('series'),
+                'parent_id'=>$brand_id,
+                'level'=>2,
+            ));
             $series_id=++$brand_id;
-            $type=$request->get('type').'_'.$series_id;
-            Car_type::create(array_merge(array('type'=>$type),$request->except(['_method','brand','series','type'])));
+            //新建type
+            Car_type::create(array_merge(array(
+                'name'=>$request->get('type'),
+                'parent_id'=>$series_id,
+                'level'=>3,
+            ),$request->except(['_method','brand','series','type'])));
             return true;
         }else{
             //再查series
             $brand_id=$brand->first()->id;
-            $series=Car_type::where('series',$request->get('series').'_'.$brand_id);
+            $series=Car_type::where('level','=',2)->where('parent_id','=',$brand_id)->where('name',$request->get('series'));
             if($series->get()->isEmpty()){//series不存在,添加记录（但不添加brand）
-                $series_id=Car_type::orderBy('id','asc')->get()->last()->id+1;
-                $series=$request->get('series').'_'.$brand_id;
-                Car_type::create(array('series'=>$series));
-                $type=$request->get('type').'_'.$series_id;
-                Car_type::create(array_merge(array('type'=>$type),$request->except(['_method','brand','series','type'])));
+                //新建series
+                Car_type::create(array(
+                    'name'=>$request->get('series'),
+                    'parent_id'=>$brand_id,
+                    'level'=>2,
+                ));
+                $series_id=Car_type::orderBy('id','asc')->get()->last()->id;
+                //新建type
+                Car_type::create(array_merge(array(
+                    'name'=>$request->get('type'),
+                    'parent_id'=>$series_id,
+                    'level'=>3,
+                    ),$request->except(['_method','brand','series','type'])));
                 return true;
             }else{
                 $series_id=$series->first()->id;
-                $type=Car_type::where('type',$request->get('type').'_'.$series_id);
+                $type=Car_type::where('level','=',3)->where('parent_id','=',$series_id)->where('name',$request->get('type'));
                 if($type->get()->isEmpty()){//type不存在
-                    $type=$request->get('type').'_'.$series_id;
-                    $temp=array(
-                       'type'=>$type,
-                    );
                     //dd(array_merge($temp,$request->except(['brand','series','type'])));
-                    Car_type::create(array_merge($temp,$request->except(['_method','brand','series','type'])));
+                    Car_type::create(array_merge(array(
+                        'name'=>$request->get('type'),
+                        'parent_id'=>$series_id,
+                        'level'=>3,
+                    ),$request->except(['_method','brand','series','type'])));
                     return true;
                 }else{
                     return false;
@@ -109,18 +113,15 @@ class Car_type extends Model
     public static function ChangeType(Request $request,$id){
         //dd(Car_type::where('id',$id)->get());
         $type=Car_type::find($id);
-        $arr=explode('_',$type->type);
-        $series_id=(int)$arr[1];
-        $series=Car_type::find($series_id)->series;
-        $arr=explode('_',$series);
-        $series=$arr[0];
-        $brand_id=(int)$arr[1];
-        $brand=Car_type::find($brand_id)->brand;
-        if($brand!=$request->get('brand')||$series!=$request->get('series')){
+        $series_id=$type->parent_id;
+        $series=Car_type::find($series_id);
+        $brand_id=$series->parent_id;
+        $brand=Car_type::find($brand_id);
+        if($brand->name!=$request->get('brand')||$series->name!=$request->get('series')){
             $type->delete();
             self::CreateNewType($request);
         }else{
-            $arr=array('type'=>$request->get('type').'_'.$series_id);
+            $arr=array('name'=>$request->get('type'));
             Car_type::where('id',$id)->update(array_merge($arr,$request->except('brand','series','type','user_id','_method','_token')));
         }
 
@@ -198,30 +199,28 @@ class Car_type extends Model
         $types=$types->get();*/
         //dd($types);
 
-        $types=DB::table('car_types')->where('type','<>','')->get();
+        $types=DB::table('car_types')->where('level','=','3')->get();
         $result=collect();
         foreach($types as $type){
             $flag=true;
             if($request!=null){
-                $arr=explode('_',$type->type);
-                $car_type=$arr[0];
-                $series_id=(int)$arr['1'];
-                $series=Car_type::find($series_id);
-                $arr=explode('_',$series->series);
-                $car_series=$arr[0];
-                $brand_id=(int)$arr[1];
-                $brand=Car_type::find($brand_id);
+                $car_type=$type->name;
+                $series_id=$type->parent_id;
+                $series=Car_type::where('level',2)->find($series_id);
+                $car_series=$series->name;
+                $brand_id=$series->parent_id;
+                $brand=Car_type::where('level',1)->find($brand_id);
                 //var_dump($brand);
                 $emission_standard=$type->emission_standard;
-                if($request->get('brand')!='null'&&$brand->brand!=$request->get('brand'))
+                if($request->get('brand')!=''&&$brand->name!=$request->get('brand'))
                 {
                         $flag=false;
                 }
 
-                if($request->get('series')!='null'&&$car_series!=$request->get('series')){
+                if($request->get('series')!=''&&$car_series!=$request->get('series')){
                     $flag=false;
                 }
-                if($request->get('type')!='null'&&$car_type!=$request->get('type')){
+                if($request->get('type')!=''&&$car_type!=$request->get('type')){
                     $flag=false;
                 }
                 if($request->get('emission_standard')){
@@ -235,7 +234,7 @@ class Car_type extends Model
                     if($emission_standard!=$standard){
                         $flag=false;
                     }
-                    $types=$types->where('emission_standard','=',$standard);
+                    //$types=$types->where('emission_standard','=',$standard);
                     //$types=$types->get();
                     //dd($standard);
                 }

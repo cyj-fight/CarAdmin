@@ -5,13 +5,13 @@
 <table border="1" style="border-color: #5e5e5e;border-style: inset">
     <tr>
         <td>
-            品牌
+            name
         </td>
         <td>
-            车系
+            parent_id
         </td>
         <td>
-            车型
+            level
         </td>
         <td>
             座位数
@@ -27,13 +27,13 @@
     @foreach($types as $type)
                 <tr>
                     <td>
-                        {{$type->brand}}
+                        {{$type->name}}
                     </td>
                     <td>
-                        {{$type->series}}
+                        {{$type->parent_id}}
                     </td>
                     <td>
-                        {{$type->type}}
+                        {{$type->level}}
                     </td>
                     <td>
                         {{$type->seat_num}}

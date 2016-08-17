@@ -9,9 +9,9 @@
 
     <form method="post" action="{{url('admin/manager/select')}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        品牌：<input type="text" name="brand" value="null">
-        车系：<input type="text" name="series" value="null">
-        车型：<input type="text" name="type" value="null">
+        品牌：<input type="text" name="brand" value="">
+        车系：<input type="text" name="series" value="">
+        车型：<input type="text" name="type" value="">
         排放标准:<input type="radio" name="emission_standard" value="1">国4
         <input type="radio" name="emission_standard" value="2">国5
         <input type="submit" value="查询">
@@ -44,13 +44,13 @@
         @foreach($types as $type)
                     <tr>
                         <td>
-                            {{Car_type::getBrand($type->type)}}
+                            {{Car_type::getBrand($type->parent_id)->name}}
                         </td>
                         <td>
-                            {{Car_type::getSeries($type->type)}}
+                            {{Car_type::getSeries($type->parent_id)->name}}
                         </td>
                         <td>
-                            {{Car_type::getType($type->type)}}
+                            {{$type->name}}
                         </td>
                         <td>
                             {{$type->seat_num}}

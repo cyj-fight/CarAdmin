@@ -14,9 +14,9 @@ class CreateCarTypesTable extends Migration
     {
         Schema::create('car_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('brand');
-            $table->string('series');
-            $table->string('type');
+            $table->string('name');
+            $table->integer('parent_id');
+            $table->integer('level');
             $table->integer('user_id');
             $table->integer('seat_num');
             $table->timestamp('made_at');

@@ -10,7 +10,7 @@
         @endif
     <form method="post" action="{{url('auth/register')}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="user_group" value="2">
+        <input type="hidden" name="user_group" value="1">
         用户名：<br/><input type="text" name="name"><br/>
         性别：<br/><input type="radio" name="sex" value="1">男
         <input type="radio" name="sex" value="2">女<br/>

@@ -23,7 +23,7 @@ class UserHomeController extends UserController
     public function index()
     {
         //dd(User_type::where('user_id',Auth::user()->id)->get()->count());
-        return view('user.index')->withUser(Auth::user())->withTypes(Car_type::where('user_id',Auth::user()->id)->get());
+        return view('user.index')->withUser(Auth::user())->withTypes(Car_type::where('user_id',Auth::user()->id)->where('level',3)->get());
     }
 
     /**
@@ -113,7 +113,7 @@ class UserHomeController extends UserController
      */
     public function destroy($id)
     {
-        if($type=Car_type::where('user_id',Auth::user()->id)->find($id)){
+        if($type=Car_type::where('user_id',Auth::user()->id)->where('level',3)->find($id)){
             $type->delete();
             return Redirect::back();
         }
