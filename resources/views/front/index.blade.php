@@ -1,6 +1,9 @@
 @extends('layout.default')
 
 @section('content')
+    <script type="text/javascript">
+
+    </script>
 <a href="{{url('auth/login')}}" methods="get">登录后台</a>
 <table border="1" style="border-color: #5e5e5e;border-style: inset">
     <tr>

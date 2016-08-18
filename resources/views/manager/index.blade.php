@@ -1,6 +1,20 @@
 @extends('layout.default')
 
 @section('content')
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $("#brand").change(function(){
+                $.post('{{url('admin/manager/select')}}',{
+                    _token:$("#token").text(),
+                    brand:$("#brand option:selected").text(),
+                    series:$("#series option:selected").text(),
+                    type:$('#type option:selected').text()
+                }, function ($brand) {
+                    $('option#'+$brand).selected("selected")
+                });
+            });
+        });
+    </script>
     <?php use App\Car_type;?>
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -8,10 +22,28 @@
     <a href="{{url('admin/manager/create')}}">新建</a><br/><br/>
 
     <form method="post" action="{{url('admin/manager/select')}}">
-        <input type="hidden" name="_token" value="{{csrf_token()}}">
-        品牌：<input type="text" name="brand" value="">
-        车系：<input type="text" name="series" value="">
-        车型：<input type="text" name="type" value="">
+        <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
+        品牌：<select id="brand">
+            <option value=""></option>
+            @foreach($brands as $brand)
+                <option id="{{$brand->name}}" value="{{$brand->name}}">{{$brand->name}}</option>
+                @endforeach
+        </select>
+        <input type="text" name="brand" value="">
+        车系：<select id="series">
+            <option value=""></option>
+            @foreach($series as $serie)
+                <option value="{{$serie->name}}">{{$serie->name}}</option>
+            @endforeach
+        </select>
+        <input type="text" name="series" value="">
+        车型：<select id="type">
+            <option value=""></option>
+            @foreach($types as $type)
+                <option value="{{$type->name}}">{{$type->name}}</option>
+            @endforeach
+        </select>
+        <input type="text" name="type" value="">
         排放标准:<input type="radio" name="emission_standard" value="1">国4
         <input type="radio" name="emission_standard" value="2">国5
         <input type="submit" value="查询">

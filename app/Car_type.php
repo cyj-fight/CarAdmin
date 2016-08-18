@@ -248,4 +248,13 @@ class Car_type extends Model
         }
         return $result;
     }
+
+    public static function SelectSeries(Request $request){
+        if($request->get('brand')!=''){
+            $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->get();
+            $series=Car_type::where('level',2)->where('parent_id',$brand->id)->get();
+            return $series;
+        }
+    }
+
 }
