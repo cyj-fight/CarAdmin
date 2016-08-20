@@ -2,18 +2,49 @@
 
 @section('content')
     <script type="text/javascript">
-        $(document).ready(function (){
+        $(document).ready(function () {
             $("#brand").change(function(){
-                $.post('{{url('admin/manager/select')}}',{
-                    _token:$("#token").text(),
-                    brand:$("#brand option:selected").text(),
-                    series:$("#series option:selected").text(),
-                    type:$('#type option:selected').text()
-                }, function ($brand) {
-                    $('option#'+$brand).selected("selected")
-                });
+                /*$.ajax({
+                    type: "POST",
+                    url: "{{url('admin/manager/select')}}",
+                    contentType: "application/json", //必须有
+                    dataType: "json", //表示返回值类型，不必须
+                    data: JSON.stringify({
+                        '_token': $("#token").val(),
+                        'brand':$("#brand").find("option:selected").val(),
+                        'series':$("#series").find("option:selected").val(),
+                        'type':$("#type").find("option:selected").val(),
+                        'emission_standard':$("input[name='emission_standard']:checked").val()
+                    }),
+                    //相当于 //data: "{'str1':'foovalue', 'str2':'barvalue'}",
+                    success: function (jsonResult) {
+                        alert(jsonResult);
+
+                });*/
+                var token=$("#token").val();
+                var brand=$("#brand").find("option:selected").val();
+                var series=$("#series").find("option:selected").val();
+                var type=$("#type").find("option:selected").val()
+                var emission_standard=$("input[name='emission_standard']:checked").val();
+                if(emission_standard==undefined){
+                    emission_standard="";
+                }
+                alert(emission_standard);
+
+                $.post("{{url('admin/manager/select')}}",{
+                    '_token':token,
+                    'brand':brand,
+                    'series':series,
+                    'type':type,
+                    'emission_standard':emission_standard
+                }//,function(data){
+                 //   alert(data);
+                //},
+                //'json'
+                );
             });
-        });
+
+            });
     </script>
     <?php use App\Car_type;?>
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}

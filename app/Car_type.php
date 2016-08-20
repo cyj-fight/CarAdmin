@@ -128,6 +128,7 @@ class Car_type extends Model
     }
 
     public static function SelectTypes(Request $request=null){
+        //dd($request);
         /*if($request->get('car_type')==null){
             $types=Car_type::all();
         }else
@@ -198,7 +199,6 @@ class Car_type extends Model
 
         $types=$types->get();*/
         //dd($types);
-
         $types=DB::table('car_types')->where('level','=','3')->get();
         $result=collect();
         foreach($types as $type){
@@ -256,5 +256,4 @@ class Car_type extends Model
             return $series;
         }
     }
-
 }
