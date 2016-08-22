@@ -2,49 +2,73 @@
 
 @section('content')
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(function () {
+            //品牌改变
             $("#brand").change(function(){
-                /*$.ajax({
-                    type: "POST",
-                    url: "{{url('admin/manager/select')}}",
-                    contentType: "application/json", //必须有
-                    dataType: "json", //表示返回值类型，不必须
-                    data: JSON.stringify({
-                        '_token': $("#token").val(),
-                        'brand':$("#brand").find("option:selected").val(),
-                        'series':$("#series").find("option:selected").val(),
-                        'type':$("#type").find("option:selected").val(),
-                        'emission_standard':$("input[name='emission_standard']:checked").val()
-                    }),
-                    //相当于 //data: "{'str1':'foovalue', 'str2':'barvalue'}",
-                    success: function (jsonResult) {
-                        alert(jsonResult);
-
-                });*/
                 var token=$("#token").val();
                 var brand=$("#brand").find("option:selected").val();
                 var series=$("#series").find("option:selected").val();
-                var type=$("#type").find("option:selected").val()
+                var car_type=$("#type").find("option:selected").val()
                 var emission_standard=$("input[name='emission_standard']:checked").val();
                 if(emission_standard==undefined){
                     emission_standard="";
                 }
-                alert(emission_standard);
+                //alert(emission_standard);
+                var a='{{rand()}}';
+                $.post("{{url('admin/manager/abc')}}",{
+                    _token:token,
+                    brand:brand,
+                    series:series,
+                    car_type:car_type,
+                    emission_standard:emission_standard,
+                    a:a
+                },function(data){//填充options
+                    //var info = JSON.parse(data);
+                   var series=data[0];
+                    var types=data[1];
+                    //data.each()
+                    //更新车系
+                    $("#series").empty();
+                    $("#series").append("<option value=''>请选择</option>")
+                    for(var i=0;i<series.length;i++){
+                        $("#series option").last().after("<option value='"+series[i]['name']+"'>"+series[i]['name']+"</option>");
+                    }
 
-                $.post("{{url('admin/manager/select')}}",{
-                    '_token':token,
-                    'brand':brand,
-                    'series':series,
-                    'type':type,
-                    'emission_standard':emission_standard
-                }//,function(data){
-                 //   alert(data);
-                //},
-                //'json'
+                    //更新车型
+                    $("#type").empty();
+                    $("#type").append("<option value=''>请选择</option>")
+                    for(var i=0;i<types.length;i++){
+                        $("#type option").last().after("<option valur='"+types[i]['name']+"'>"+types[i]['name']+"</option>");
+                    }
+                },
+                'json'
                 );
             });
 
+            $("#series").change(function(){
+                var token=$("#token").val();
+                var brand=$("#brand").find("option:selected").val();
+                var series=$("#series").find("option:selected").val();
+                var car_type=$("#type").find("option:selected").val()
+                var emission_standard=$("input[name='emission_standard']:checked").val();
+                if(emission_standard==undefined){
+                    emission_standard="";
+                }
+                //alert(emission_standard);
+                var a='{{rand()}}';
+                $.post("{{url('admin/manager/abc')}}",{
+                    _token:token,
+                    brand:brand,
+                    series:series,
+                    car_type:car_type,
+                    emission_standard:emission_standard,
+                    a:a
+                },function(data){
+
+                });
             });
+            }
+        );
     </script>
     <?php use App\Car_type;?>
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
@@ -55,21 +79,21 @@
     <form method="post" action="{{url('admin/manager/select')}}">
         <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
         品牌：<select id="brand">
-            <option value=""></option>
+            <option value="">请选择</option>
             @foreach($brands as $brand)
                 <option id="{{$brand->name}}" value="{{$brand->name}}">{{$brand->name}}</option>
                 @endforeach
         </select>
         <input type="text" name="brand" value="">
         车系：<select id="series">
-            <option value=""></option>
+            <option value="">请选择</option>
             @foreach($series as $serie)
                 <option value="{{$serie->name}}">{{$serie->name}}</option>
             @endforeach
         </select>
         <input type="text" name="series" value="">
         车型：<select id="type">
-            <option value=""></option>
+            <option value="">请选择</option>
             @foreach($types as $type)
                 <option value="{{$type->name}}">{{$type->name}}</option>
             @endforeach

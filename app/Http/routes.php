@@ -17,8 +17,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],funct
     Route::get('/home','HomeController@index');
 
     Route::post('manager/select','Manager\ManageHomeController@postSelect');
-    Route::get('manager/select','Manager\ManageHomeController@postSelect');
-
+    Route::post('manager/abc','Manager\ManageHomeController@postAbc');
+    Route::get('manager/abc','Manager\ManageHomeController@postAbc');
     Route::resource('manager','Manager\ManageHomeController');
     Route::resource('user','User\UserHomeController');
 

@@ -251,8 +251,12 @@ class Car_type extends Model
 
     public static function SelectSeries(Request $request){
         if($request->get('brand')!=''){
-            $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->get();
-            $series=Car_type::where('level',2)->where('parent_id',$brand->id)->get();
+            $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
+            $series=Car_type::where('level',2);
+                if(isset($brand)){
+                    $series=$series->where('parent_id',$brand->id);
+                }
+                $series=$series->get();
             return $series;
         }
     }

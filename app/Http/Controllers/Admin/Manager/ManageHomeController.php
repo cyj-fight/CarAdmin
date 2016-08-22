@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Manager;
 use App\Brand;
 use App\Car_type;
 use App\Http\Controllers\Admin\ManageController;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -120,8 +121,20 @@ class ManageHomeController extends ManageController
 
     public function postSelect(Request $request){
         //dd(Car_type::SelectTypes($request));
-        return view('manager.index')->withBrands(Car_type::where('level',1))->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));
+        return view('manager.index')->withBrands(Car_type::where('level',1)->get())->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));
 
+    }
+
+    public function postAbc(Request $request){
+        $brands=Car_type::where('level',1)->get();
+        $series=Car_type::SelectSeries($request);
+        $types=Car_type::SelectTypes($request);
+        //dd($types->all());
+        //$collection=new Collection();
+        //$all=$collection->merge($series)->merge($types);
+        $all=array_merge(array($series),array($types));
+        //dd($all);
+        return $all;
     }
 
 }
