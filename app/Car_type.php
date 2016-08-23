@@ -200,6 +200,7 @@ class Car_type extends Model
         $types=$types->get();*/
         //dd($types);
         $types=DB::table('car_types')->where('level','=','3')->get();
+        //dd($types);
         $result=collect();
         foreach($types as $type){
             $flag=true;
@@ -250,9 +251,9 @@ class Car_type extends Model
     }
 
     public static function SelectSeries(Request $request){
+        $series=Car_type::where('level',2);
         if($request->get('brand')!=''){
             $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
-            $series=Car_type::where('level',2);
                 if(isset($brand)){
                     $series=$series->where('parent_id',$brand->id);
                 }

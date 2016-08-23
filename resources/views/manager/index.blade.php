@@ -15,7 +15,7 @@
                 }
                 //alert(emission_standard);
                 var a='{{rand()}}';
-                $.post("{{url('admin/manager/abc')}}",{
+                $.post("{{url('admin/manager/select/brand')}}",{
                     _token:token,
                     brand:brand,
                     series:series,
@@ -24,22 +24,29 @@
                     a:a
                 },function(data){//填充options
                     //var info = JSON.parse(data);
-                   var series=data[0];
-                    var types=data[1];
+                   var series=data;
+                    //var types=data[1];
                     //data.each()
-                    //更新车系
+
+                    $("#type").attr('disabled','disabled');
+                    $("#type").empty();
+                    $("#type").append("<option value=''>选择车型</option>")
+                    //更新下拉列表车系
+                    $("#series").removeAttr('disabled');
                     $("#series").empty();
-                    $("#series").append("<option value=''>请选择</option>")
+                    $("#series").append("<option value=''>选择车系</option>")
                     for(var i=0;i<series.length;i++){
                         $("#series option").last().after("<option value='"+series[i]['name']+"'>"+series[i]['name']+"</option>");
                     }
 
                     //更新车型
-                    $("#type").empty();
-                    $("#type").append("<option value=''>请选择</option>")
-                    for(var i=0;i<types.length;i++){
-                        $("#type option").last().after("<option valur='"+types[i]['name']+"'>"+types[i]['name']+"</option>");
-                    }
+                    //$("#type").empty();
+                    //$("#type").append("<option value=''>请选择</option>")
+                    //for(var i=0;i<types.length;i++){
+                    //    $("#type option").last().after("<option valur='"+types[i]['name']+"'>"+types[i]['name']+"</option>");
+                    //}
+
+                    //更新搜索结果
                 },
                 'json'
                 );
@@ -56,7 +63,7 @@
                 }
                 //alert(emission_standard);
                 var a='{{rand()}}';
-                $.post("{{url('admin/manager/abc')}}",{
+                $.post("{{url('admin/manager/select/series')}}",{
                     _token:token,
                     brand:brand,
                     series:series,
@@ -64,8 +71,18 @@
                     emission_standard:emission_standard,
                     a:a
                 },function(data){
-
-                });
+                    //alert(data);
+                    var types=data;
+                    $("#type").removeAttr("disabled");
+                    $("#type").empty();
+                    $("#type").append("<option value=''>选择车型</option>")
+                    for(var i=0;i<types.length;i++)
+                    {
+                        $("#type option").last().after("<option value='"+types[i]['name']+"'>"+types[i]['name']+"</option>");
+                    }
+                },
+                        'json'
+                );
             });
             }
         );
@@ -78,29 +95,24 @@
 
     <form method="post" action="{{url('admin/manager/select')}}">
         <input type="hidden" id="token" name="_token" value="{{csrf_token()}}">
-        品牌：<select id="brand">
-            <option value="">请选择</option>
+        <h2>筛选：</h2><hr/>
+        品牌：<select id="brand" name="brand" style="width: 100px;height: 20px">
+            <option value="">选择品牌</option>
             @foreach($brands as $brand)
                 <option id="{{$brand->name}}" value="{{$brand->name}}">{{$brand->name}}</option>
                 @endforeach
         </select>
-        <input type="text" name="brand" value="">
-        车系：<select id="series">
-            <option value="">请选择</option>
-            @foreach($series as $serie)
-                <option value="{{$serie->name}}">{{$serie->name}}</option>
-            @endforeach
+        车系：<select id="series" name="series" disabled="disabled" style="width: 100px;height: 20px">
+            <option value="">选择车系</option>
         </select>
-        <input type="text" name="series" value="">
-        车型：<select id="type">
-            <option value="">请选择</option>
-            @foreach($types as $type)
-                <option value="{{$type->name}}">{{$type->name}}</option>
-            @endforeach
+        车型：<select id="type"  name="type" disabled="disabled" style="width: 100px;height: 20px">
+            <option value="">选择车型</option>
         </select>
-        <input type="text" name="type" value="">
         排放标准:<input type="radio" name="emission_standard" value="1">国4
         <input type="radio" name="emission_standard" value="2">国5
+        <input type="submit" value="查询">
+        <h2>查找车型:</h2><hr/>
+        <input type="text" name="type" value="">
         <input type="submit" value="查询">
     </form>
 

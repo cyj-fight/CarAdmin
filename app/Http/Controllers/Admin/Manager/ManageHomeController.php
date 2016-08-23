@@ -125,16 +125,20 @@ class ManageHomeController extends ManageController
 
     }
 
-    public function postAbc(Request $request){
-        $brands=Car_type::where('level',1)->get();
+    public function postSelectBrand(Request $request){
         $series=Car_type::SelectSeries($request);
-        $types=Car_type::SelectTypes($request);
+        //$types=Car_type::SelectTypes($request);
         //dd($types->all());
         //$collection=new Collection();
         //$all=$collection->merge($series)->merge($types);
-        $all=array_merge(array($series),array($types));
+        //$all=array_merge(array($series),array($types));
         //dd($all);
-        return $all;
+        return $series;
+    }
+
+    public function postSelectSeries(Request $request){
+        $types=Car_type::selectTypes($request);
+        return $types;
     }
 
 }
