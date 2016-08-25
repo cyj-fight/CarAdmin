@@ -15,14 +15,14 @@ Route::get('/','FrontController@index');
 
 Route::get('admin/manager/select/brand','Admin\Manager\ManageHomeController@postSelectBrand');
 Route::get('admin/manager/select/series','Admin\Manager\ManageHomeController@postSelectSeries');
-Route::get('admin/manager/select/type','Admin\Manager\ManagerHomeController@postSelectType');
+Route::get('admin/manager/select/type','Admin\Manager\ManageHomeController@postSelectType');
 Route::get('admin/manager/select','Admin\Manager\ManageHomeController@postSelect');
-Route::get('admin/manager/select/getparents','Admin\ManagerHomeController@getParents');
+Route::get('admin/manager/select/getparents','Admin\Manager\ManageHomeController@getParents');
 
 Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'auth'],function(){
     Route::get('/home','HomeController@index');
 
-    Route::get('manager/select/series','Manager\ManageHomeController@postSelectSeries');
+    //Route::get('manager/select/series','Manager\ManageHomeController@postSelectSeries');
     Route::resource('manager','Manager\ManageHomeController');
     Route::resource('user','User\UserHomeController');
 

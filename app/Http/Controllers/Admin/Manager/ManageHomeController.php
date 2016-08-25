@@ -122,8 +122,8 @@ class ManageHomeController extends ManageController
     public function postSelect(Request $request){
         //dd(Car_type::SelectTypes($request));
         $types=Car_type::SelectTypes($request);
-        return $types;
-        //return view('manager.index')->withBrands(Car_type::where('level',1)->get())->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));
+        //return $types;
+        return view('manager.index')->withBrands(Car_type::where('level',1)->get())->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));
 
     }
 
@@ -143,7 +143,8 @@ class ManageHomeController extends ManageController
         return $types;
     }
 
-    public function getParents($id){
+    public function getParents(Request $request){
+        $id=(int)$request->get('id');
         $brand=Car_type::getBrand($id);
         $series=Car_type::getSeries($id);
         return array($brand,$series);
