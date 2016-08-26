@@ -13,6 +13,12 @@
 
 Route::get('/','FrontController@index');
 
+Route::get('select/brand','FrontController@postSelectBrand');
+Route::get('select/series','FrontController@postSelectSeries');
+Route::get('select/type','FrontController@postSelectType');
+Route::get('select','FrontController@postSelect');
+Route::get('select/getparents','FrontController@getParents');
+
 Route::get('admin/manager/select/brand','Admin\Manager\ManageHomeController@postSelectBrand');
 Route::get('admin/manager/select/series','Admin\Manager\ManageHomeController@postSelectSeries');
 Route::get('admin/manager/select/type','Admin\Manager\ManageHomeController@postSelectType');

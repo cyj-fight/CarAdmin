@@ -28,6 +28,7 @@
             $("#brand option[value='"+brand+"']").attr('selected','selected');
             //alert(brand+''+series);
             if(brand!=undefined&&brand!=''){
+                $("#type_only input[name='type']").attr('value','');
                 $("#series").removeAttr('disabled');
                 var a='{{rand()}}';
                 $.get("{{url('admin/manager/select/brand')}}",{
@@ -65,7 +66,7 @@
                             // _token:token,
                             brand:brand,
                             series:series,
-                            type:car_type,
+                            //type:car_type,
                             emission_standard:emission_standard,
                             a:a
                         },function(data){
@@ -89,6 +90,8 @@
                 emission_standard=='';
             }
             $("input[value='"+emission_standard+"']").attr('checked','checked');
+
+
             //品牌改变
             $("#brand").change(function(){
                 var sign=$("#brand").find('option:selected').val();
@@ -154,10 +157,9 @@
             $("#series").change(function(){
                 var sign=$("#series").find("option:selected").val();
                 if(sign!=''){
-                    var token=$("#token").val();
                     var brand=$("#brand").find("option:selected").val();
                     var series=$("#series").find("option:selected").val();
-                    var car_type=$("#type").find("option:selected").val()
+                    //var car_type=$("#type").find("option:selected").val()
                     var emission_standard=$("input[name='emission_standard']:checked").val();
                     if(emission_standard==undefined){
                         emission_standard="";
@@ -168,7 +170,7 @@
                        // _token:token,
                         brand:brand,
                         series:series,
-                        type:car_type,
+                        //type:car_type,
                         emission_standard:emission_standard,
                         a:a
                     },function(data){
@@ -177,7 +179,6 @@
                         $("#type").empty();
                         $("#type").append("<option value=''>选择车型</option>")
                         //alert($("#series").find("option:selected").val());
-
                             $("#type").removeAttr('disabled');
                             for(var i=0;i<types.length;i++)
                             {
@@ -194,100 +195,7 @@
                     }
             });
 
-            $("#complex button").click(function()
-            {
-                var brand=$("#brand").find("option:selected").val();
-                var series=$("#series").find("option:selected").val();
-                var car_type=$("#type").find("option:selected").val()
-                var emission_standard=$("input[name='emission_standard']:checked").val();
-                if(emission_standard==undefined)
-                {
-                    emission_standard="";
-                }
-                //alert(emission_standard);
-                var a='{{rand()}}';
-                $.get("{{url('admin/manager/select')}}",
-                {
-                    brand:brand,
-                    series:series,
-                    type:car_type,
-                    emission_standard:emission_standard,
-                    a:a
-                },
-                        function(data)
-                        {
-                            var types=data;
-                            $("tr[id='type_row']").remove();
-                            $.each(types,function(n,type){
-                                //alert(type['name']);
-                                var parent_id=type['parent_id'];
-                                var token=$("#token").val();
-                                $.get("{{url('admin/manager/select/getparents')}}",
-                                        "id="+parent_id,function(data){
-                                            //alert(i);
-                                            $("tr").last().after(
-                                                    "<tr id='type_row'>"
-                                                    +"<td>"+data[0]['name']+"</td>"
-                                                    +"<td>"+data[1]['name']+"</td>"
-                                                    +"<td>"+type['name']+"</td>"
-                                                    +"<td>"+type['seat_num']+"</td>"
-                                                     +"<td>"+type['made_at']+"</td>"
-                                                     +"<td>"+type['emission_standard']+"</td>"
-                                                     +"<td>"+"<a href='http://www.caradmin.com/admin/manager/"+type['id']+"/edit'><button>编辑</button></a>"+"</td>"
-                                                     +"<td>"
-                                                     +"<form method='post' action='http://www.caradmin.com/admin/manager/"+type['id']+"'>"
-                                                     +"<input type='hidden' name='_token' value='"+token+"'>"
-                                                     +"<input type='hidden' name='_method' value='DELETE'>"
-                                                     +"<input type='submit' name='delete' value='删除'>"
-                                                     +"</form>"
-                                                     +"</td></tr>"
-                                            );
-                                        });
-                            })
-                        },
-                        'json'
-                );
-
-            });
-
-            $("#type_only button").click(function(){
-                var type=$("#type_only input[name='type']").val();
-                var a='{{rand()}}';
-
-                $.get("{{url('admin/manager/select')}}",{type:type},function(data){
-                    var types=data;
-                    $("tr[id='type_row']").remove();
-                    $.each(types,function(n,type){
-                        //alert(type['name']);
-                        var parent_id=type['parent_id'];
-                        var token=$("#token").val();
-                        $.get("{{url('admin/manager/select/getparents')}}",
-                                "id="+parent_id,function(data){
-                                    //alert(i);
-                                    $("tr").last().after(
-                                            "<tr id='type_row'>"
-                                            +"<td>"+data[0]['name']+"</td>"
-                                            +"<td>"+data[1]['name']+"</td>"
-                                            +"<td>"+type['name']+"</td>"
-                                            +"<td>"+type['seat_num']+"</td>"
-                                            +"<td>"+type['made_at']+"</td>"
-                                            +"<td>"+type['emission_standard']+"</td>"
-                                            +"<td>"+"<a href='http://www.caradmin.com/admin/manager/"+type['id']+"/edit'><button>编辑</button></a>"+"</td>"
-                                            +"<td>"
-                                            +"<form method='post' action='http://www.caradmin.com/admin/manager/"+type['id']+"'>"
-                                            +"<input type='hidden' name='_token' value='"+token+"'>"
-                                            +"<input type='hidden' name='_method' value='DELETE'>"
-                                            +"<input type='submit' name='delete' value='删除'>"
-                                            +"</form>"
-                                            +"</td></tr>"
-                                    );
-                                });
-                    })
-                });
-
-            });
-            }
-        );
+        });
     </script>
     <?php use App\Car_type;?>
     欢迎回来{{\Illuminate\Support\Facades\Auth::user()->name}}
@@ -313,14 +221,13 @@
         <input type="radio" name="emission_standard" value="1">国4
         <input type="radio" name="emission_standard" value="2">国5
 
-        <button>查询</button>
         <input type="submit" value="submit">
     </form>
-    <div id="type_only">
+    <form id="type_only" method="get" action="{{url('admin/manager/select')}}">
         <h2>查找车型:</h2><hr/>
-        <input type="text" name="type" value="">
-        <button>查询</button>
-    </div>
+        <input type="text" name="type" value="{{request('type')}}">
+        <input type="submit" value="查询">
+    </form>
 
     <table border="1" style="border-color: #5e5e5e;border-style: inset">
         <tr id="title_row">

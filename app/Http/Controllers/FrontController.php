@@ -20,72 +20,38 @@ class FrontController extends Controller
      */
     public function index()
     {
-        return view('front.index')->withTypes(Car_type::all());
+        return view('front.index')->withBrands(Car_type::where('level',1)->get())->withTypes(Car_type::where('level',3)->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('front.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+    public function postSelect(Request $request){
+        //dd(Car_type::SelectTypes($request));
+        $types=Car_type::SelectTypes($request);
+        //return $types;
+        return view('front.index')->withBrands(Car_type::where('level',1)->get())->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function postSelectBrand(Request $request){
+        $series=Car_type::SelectSeries($request);
+        //$types=Car_type::SelectTypes($request);
+        //dd($types->all());
+        //$collection=new Collection();
+        //$all=$collection->merge($series)->merge($types);
+        //$all=array_merge(array($series),array($types));
+        //dd($all);
+        return $series;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function postSelectSeries(Request $request){
+        $types=Car_type::selectTypes($request);
+        return $types;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function getParents(Request $request){
+        $id=(int)$request->get('id');
+        $brand=Car_type::getBrand($id);
+        $series=Car_type::getSeries($id);
+        return array($brand,$series);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
