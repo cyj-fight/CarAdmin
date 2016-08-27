@@ -23,8 +23,15 @@ class FrontController extends Controller
         return view('front.index')->withBrands(Car_type::where('level',1)->get())->withTypes(Car_type::where('level',3)->get());
     }
 
+    public function create(){
+        return view('front.create');
+    }
+    public function store(Request $request){
+        Car_type::CreateNewType($request);
+    }
     public function postSelect(Request $request){
         //dd(Car_type::SelectTypes($request));
+        //var_dump($request);
         $types=Car_type::SelectTypes($request);
         //return $types;
         return view('front.index')->withBrands(Car_type::where('level',1)->get())->withSeries(Car_type::SelectSeries($request))->withTypes(Car_type::SelectTypes($request));

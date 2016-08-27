@@ -46,7 +46,7 @@ class Car_type extends Model
                 'parent_id'=>$brand_id,
                 'level'=>2,
             ));
-            $series_id=++$brand_id;
+            $series_id=Car_type::where('level',2)->where('name',$request->get('series'))->where('parent_id',$brand_id)->first()->id;
             //新建type
             Car_type::create(array_merge(array(
                 'name'=>$request->get('type'),
@@ -65,7 +65,7 @@ class Car_type extends Model
                     'parent_id'=>$brand_id,
                     'level'=>2,
                 ));
-                $series_id=Car_type::orderBy('id','asc')->get()->last()->id;
+                $series_id=Car_type::where('level','=',2)->where('parent_id','=',$brand_id)->where('name',$request->get('series'))->first()->id;
                 //新建type
                 Car_type::create(array_merge(array(
                     'name'=>$request->get('type'),
@@ -221,7 +221,7 @@ class Car_type extends Model
                 if($request->get('series')!=''&&$car_series!=$request->get('series')){
                     $flag=false;
                 }
-                if($request->get('type')!=''&&$car_type!=$request->get('type')){
+                if($request->get('type')!=''&&!strstr($car_type,$request->get('type'))){
                     $flag=false;
                 }
                 if($request->get('emission_standard')){

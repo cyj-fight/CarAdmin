@@ -1,11 +1,33 @@
-<html>
-<head>
-    <meta charset="utf-8" content="text/html">
-    <title>
-        test
-    </title>
-</head>
-<body>
+@extends('layout.default')
+@section('content')
+    <script type="text/javascript">
+        $(function(){
+            var count=0;
+            for(var i=5;i<100;i++){
+                for(var j=1;j<10001;j++){
+                    var brand='品牌'+i;
+                    var series=brand+'车系'+parseInt(Math.random()*500000+1);
+                    var type=series+'车型'+parseInt(Math.random()*500000+1);
+                    var seat_num=parseInt(Math.random()*10)%5+5;
+                    var made_at=new Date();
+                    made_at=made_at.getTime();
+                    var emission_standard=parseInt(Math.random()*10)%2+1;
+                    $.get('{{url('insert')}}',
+                            {
+                                brand:brand,
+                                series:series,
+                                type:type,
+                                seat_num:seat_num,
+                                made_at:made_at,
+                                emission_standard:emission_standard
+                            });
+                    count++;
+                    $("#aaa").append("第"+count+"条记录添加成功,"+brand+"  "+series+"  "+type+"<br/>");
+                }
+            }
+
+        });
+    </script>
 <form method="post" action="{{url('/new')}}">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     Brand:<input type="text" name=" brand"><br/>
@@ -17,5 +39,5 @@
     <input type="radio" name="emission_standard" value="2">国5<br/>
     <input type="submit" value="Submit">
 </form>
-</body>
-</html>
+    <div id="aaa"></div>
+@endsection

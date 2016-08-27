@@ -187,6 +187,7 @@
         });
     </script>
     <?php use App\Car_type;?>
+    <?php $flag=strstr("abcdefg",'y'); var_dump($flag);?>
 <a href="{{url('auth/login')}}" methods="get">登录后台</a>
 
     <form id="complex" method="get" action="{{url('select')}}">

@@ -12,6 +12,8 @@
 */
 
 Route::get('/','FrontController@index');
+Route::get('/add','FrontController@create');
+Route::get('/insert','FrontController@store');
 
 Route::get('select/brand','FrontController@postSelectBrand');
 Route::get('select/series','FrontController@postSelectSeries');
