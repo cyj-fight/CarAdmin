@@ -8,14 +8,19 @@ class TypeSeeder extends Seeder{
         //DB::table('brands')->delete();
         //DB::table('car_series')->delete();
         //DB::table('car_types')->delete();
-        $msg=array(
-            'brand'=>'品牌1',
-            'series'=>'车系1',
-            'type'=>'车型1',
-            'seat_num'=>5,
-            'made_at'=>\Carbon\Carbon::now(),
-            'emission_standard'=>(int)rand(1,3),
-        );
+        for($i=5;$i<100;$i++){
+            for($j=1;$j<100001;$j++){
+                $request=new Request();
+                $request['brand']='品牌'.$i;
+                $request['series']='品牌'.$i.'车系'.(int)rand(1,10000);
+                $request['type']=$request->get('series').'车型'.(int)rand(1,1000);
+                $request['made_at']=\Carbon\Carbon::now();
+                $request['emission_standard']=(int)rand(1,3)%2+1;
+                Car_type::CreateNewType($request);
+            }
+        }
+
+
         /*$sum=0;
         for($i=1;$i<=5;$i++){
             for($j=1;$j<=3;$j++){

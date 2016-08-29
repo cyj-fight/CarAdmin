@@ -4,7 +4,7 @@
         $(function(){
             var count=0;
             for(var i=5;i<100;i++){
-                for(var j=1;j<10001;j++){
+                for(var j=1;j<1001;j++){
                     var brand='品牌'+i;
                     var series=brand+'车系'+parseInt(Math.random()*500000+1);
                     var type=series+'车型'+parseInt(Math.random()*500000+1);

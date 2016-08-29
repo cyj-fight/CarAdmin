@@ -20,7 +20,8 @@ class FrontController extends Controller
      */
     public function index()
     {
-        return view('front.index')->withBrands(Car_type::where('level',1)->get())->withTypes(Car_type::where('level',3)->get());
+        $types=Car_type::where('level',3)->paginate(10);
+        return view('front.index')->withBrands(Car_type::where('level',1)->get())->withTypes($types);
     }
 
     public function create(){
@@ -50,7 +51,9 @@ class FrontController extends Controller
     }
 
     public function postSelectSeries(Request $request){
-        $types=Car_type::selectTypes($request);
+        $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
+        $series=Car_type::where('level',2)->where('name',$request->get('series'))->where('parent_id',$brand->id)->first();
+        $types=Car_type::where('level',3)->where('parent_id',$series->id)->get();
         return $types;
     }
 

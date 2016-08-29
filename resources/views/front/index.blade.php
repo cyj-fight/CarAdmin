@@ -5,7 +5,7 @@
         $(function(){
             function GetRequest() {
 
-                var url = location.search; //获取url中"?"符后的字串
+                var url = decodeURI(location.search); //获取url中"?"符后的字串
                 var theRequest = new Object();
                 if (url.indexOf("?") != -1) {
                     var str = url.substr(1);
@@ -39,7 +39,7 @@
                             a:a
                         },function(data){//填充options
                             //var info = JSON.parse(data);
-                            var series=data;
+                            var car_series=data;
                             //var types=data[1];
                             //data.each()
 
@@ -50,8 +50,8 @@
                             $("#series").removeAttr('disabled');
                             $("#series").empty();
                             $("#series").append("<option value=''>选择车系</option>")
-                            for(var i=0;i<series.length;i++){
-                                $("#series option").last().after("<option value='"+series[i]['name']+"'>"+series[i]['name']+"</option>");
+                            for(var i=0;i<car_series.length;i++){
+                                $("#series option").last().after("<option value='"+car_series[i]['name']+"'>"+car_series[i]['name']+"</option>");
                             }
                             $("#series option[value='"+request['series']+"']").attr('selected','selected');
                         },
@@ -71,20 +71,22 @@
                         },function(data){
                             //alert(data);
                             var types=data;
+                            $("#type").removeAttr('disabled');
                             $("#type").empty();
                             $("#type").append("<option value=''>选择车型</option>")
                             //alert($("#series").find("option:selected").val());
 
-                            $("#type").removeAttr('disabled');
                             for(var i=0;i<types.length;i++)
                             {
                                 $("#type option").last().after("<option value='"+types[i]['name']+"'>"+types[i]['name']+"</option>");
                             }
                             $("#type option[value='"+request['type']+"']").attr('selected','selected');
+
                         },
                         'json'
                 );
             }
+
             if(emission_standard==undefined){
                 emission_standard=='';
             }
@@ -187,7 +189,6 @@
         });
     </script>
     <?php use App\Car_type;?>
-    <?php $flag=strstr("abcdefg",'y'); var_dump($flag);?>
 <a href="{{url('auth/login')}}" methods="get">登录后台</a>
 
     <form id="complex" method="get" action="{{url('select')}}">
@@ -259,4 +260,47 @@
             </tr>
         @endforeach
     </table>
+
+    <!--分页按钮 -->
+    <div style="margin: 20px 20px">
+    @if ($types->LastPage() > 1)
+
+        <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url(1) }}" class="item{{ (request('page') == 1) ? ' disabled' : '' }}">
+            <button class="icon left arrow">首页</button>
+        </a>
+        <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url((request('page')==1)?request('page'):((int)request('page')-1))}}" class="item{{ (request('page') == 1) ? ' disabled' : '' }}">
+            <button class="icon left arrow">上一页</button>
+
+        </a>
+        <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url((request('page')==1)?request('page'):((int)request('page')+1)) }}" class="item{{ (request('page') == 1) ? ' disabled' : '' }}">
+            <button class="icon left arrow">下一页</button>
+
+        </a>&nbsp;
+        @if($types->LastPage()<=8)
+          @for ($i = 1; $i <= $types->LastPage(); $i++)
+                <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url($i) }}" class="item{{ (request('page') == $i) ? ' active' : '' }}">
+            {{ $i }}
+                </a>
+            @endfor
+        @elseif(($types->LastPage()-request('page'))<7)
+            ...&nbsp;
+            @for ($i = $types->LastPage()-7; $i <= $types->LastPage(); $i++)
+                <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url($i) }}" class="item{{ (request('page') == $i) ? ' active' : '' }}">
+                    {{ $i }}
+                </a>
+            @endfor
+        @else
+            @for ($i = request('page'); $i <= request('page')+7; $i++)
+                <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url($i) }}" class="item{{ (request('page') == $i) ? ' active' : '' }}">
+                    {{ $i }}
+                </a>
+            @endfor
+            ...&nbsp;
+            @endif
+                    <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url($types->LastPage()) }}" class="item{{ (request('page') == $types->LastPage()) ? ' disabled' : '' }}">
+            <button class="icon right arrow"> 末页</button>
+        </a>
+
+    @endif
+    </div>
 @endsection

@@ -138,14 +138,31 @@ class Car_type extends Model
 
 
 
-        /*$types=Car_type::where('type','<>','');
+        $types=DB::table('car_types')->where('level','=','3');
             //->where('brands.brands',$brands);
             //->where('car_series.car_series','=',$series)
             //->where('car_types.car_type','=',$type)
             //->where('car_types.emission_standard','=',$request->get('emission_standard'))
             //->get();
         if($request!=null){
-            if($request->get('emission_standard')){
+            if($request->has('brand')&&$request->get('brand')!='')
+            {
+                $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
+                $series=Car_type::where('level',2)->where('parent_id',$brand->id)->get();
+                $id_arr=array();
+                foreach($series as $serie){
+                    $id_arr[]=$serie->id;
+                }
+                $types=$types->whereIn('parent_id',$id_arr);
+            }
+
+            if($request->has('series')&&$request->get('series')!=''){
+                $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
+                $series=Car_type::where('level',2)->where('name',$request->get('series'))->where('parent_id',$brand->id)->first();
+                $types=$types->where('parent_id',$series->id);
+            }
+
+            if($request->has('emission_standard')&&$request->get('emission_standard')){
                 $standard=$request->get('emission_standard');
                 if($standard=='1'){
                     $standard='guo4';
@@ -158,51 +175,23 @@ class Car_type extends Model
                 //dd($standard);
             }
 
-            if($request->get('type')!='null'){
-                $types=$types->where('type','like',$request->get('type').'%');
-            }
-
-            if($request->get('series')!='null'){
-                $series=Car_type::where('series','like',$request->get('series').'%')->get();
-                if(!$series->isEmpty()){
-                    $temp=DB::table('car_types')->where('type','<>','');
-                    foreach($series as $car_series){
-                        $temp=$temp->orwhere('type','like','%'.$car_series->id);
-                    }
-                    $types=$types->where($temp);
-                }else{
-                    $types=$types->where('user_id','<',0);
-                }
-            }
-
-            if($request->get('brand')!='null')
-            {
-                $brand=Car_type::where('brand',$request->get('brand'))->first();
-                if(count((array)$brand)<1){
-
-                    $types=$types->where('user_id','<',0);
-                }else{
-                    $series=Car_type::where('series','like','%'.$brand->id)->get();
-                    //dd($series);
-                    if(!$series->isEmpty()){
-                        //$temp=DB::table('car_types')->where('type','<>','');
-                        foreach($series as $car_series){
-                            //$temp=$temp->orwhere('type','like','%'.$car_series->id);
-                            $types=$types->orwhere('type','like','%'.$car_series->id);
-                        }
-                    }else{
-                        $types=$types->where('user_id','<',0);
-                    }
-                }
+            if($request->has('type')&&$request->get('type')!=''){
+                $types=$types->where('name','like',"%".$request->get('type')."%");
             }
         }
 
-        $types=$types->get();*/
+        $types=$types->paginate(10);
+        return $types;
         //dd($types);
-        $types=DB::table('car_types')->where('level','=','3')->get();
+        //$types=DB::table('car_types')->where('level','=','3');
         //dd($types);
-        $result=collect();
-        foreach($types as $type){
+
+
+       // $result=collect();
+
+
+        //遍历所有元素，一个一个判断
+  /*     foreach($types as $type){
             $flag=true;
             if($request!=null){
                 $car_type=$type->name;
@@ -247,7 +236,7 @@ class Car_type extends Model
                 $result->prepend($type);
             }
         }
-        return $result;
+        return $result;*/
     }
 
     public static function SelectSeries(Request $request){
