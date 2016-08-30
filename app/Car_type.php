@@ -180,7 +180,7 @@ class Car_type extends Model
             }
         }
 
-        $types=$types->paginate(10);
+        $types=$types->paginate(50);
         return $types;
         //dd($types);
         //$types=DB::table('car_types')->where('level','=','3');

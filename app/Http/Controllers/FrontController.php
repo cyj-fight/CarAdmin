@@ -20,7 +20,7 @@ class FrontController extends Controller
      */
     public function index()
     {
-        $types=Car_type::where('level',3)->paginate(10);
+        $types=Car_type::where('level',3)->paginate(50);
         return view('front.index')->withBrands(Car_type::where('level',1)->get())->withTypes($types);
     }
 

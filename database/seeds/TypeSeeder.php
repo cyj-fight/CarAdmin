@@ -8,7 +8,7 @@ class TypeSeeder extends Seeder{
         //DB::table('brands')->delete();
         //DB::table('car_series')->delete();
         //DB::table('car_types')->delete();
-        for($i=5;$i<100;$i++){
+        /*for($i=100;$i<200;$i++){
             for($j=1;$j<100001;$j++){
                 $request=new Request();
                 $request['brand']='品牌'.$i;
@@ -18,8 +18,64 @@ class TypeSeeder extends Seeder{
                 $request['emission_standard']=(int)rand(1,3)%2+1;
                 Car_type::CreateNewType($request);
             }
+        }*/
+
+       for($i=1000;$i<=11006;$i++){
+            Car_type::create([
+                'name'=>'品牌5车系1车型'.$i,
+                'level'=>3,
+                'parent_id'=>31455,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
+        }
+        /*for($i=6;$i<=10006;$i++){
+            Car_type::create([
+                'name'=>'品牌4车系2车型'.$i,
+                'level'=>3,
+                'parent_id'=>661,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
+        }
+        for($i=6;$i<=10006;$i++){
+            Car_type::create([
+                'name'=>'品牌4车系3车型'.$i,
+                'level'=>3,
+                'parent_id'=>666,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
         }
 
+        for($i=6;$i<=10006;$i++){
+            Car_type::create([
+                'name'=>'品牌4车系4车型'.$i,
+                'level'=>3,
+                'parent_id'=>673,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
+        }
+        for($i=6;$i<=10006;$i++){
+            Car_type::create([
+                'name'=>'品牌4车系5车型'.$i,
+                'level'=>3,
+                'parent_id'=>664,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
+        }*/
 
         /*$sum=0;
         for($i=1;$i<=5;$i++){

@@ -13,5 +13,6 @@ class UserSeeder extends Seeder{
             'sex'=>'1',
             'user_group'=>'1',
         ]);
+        User::create([],[],[]);
     }
 }
