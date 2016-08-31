@@ -20,33 +20,45 @@ class TypeSeeder extends Seeder{
             }
         }*/
 
-       for($i=1000;$i<=11006;$i++){
+
+        /*for($i=1;$i<=10;$i++){
             Car_type::create([
-                'name'=>'品牌5车系1车型'.$i,
+                'name'=>'品牌12车系'.$i,
+                'level'=>2,
+                'parent_id'=>16358,
+            ]);
+        }
+*/
+        for($j=1;$j<=10;$j++){
+            for($i=1;$i<=10001;$i++){
+                $parent_id=693438+$j;
+            Car_type::create([
+                'name'=>'品牌12车系'.$j.'车型'.$i,
                 'level'=>3,
-                'parent_id'=>31455,
+                'parent_id'=>$parent_id,
+                'seat_num'=>(int)rand(1,5)+5,
+                'made_at'=>\Carbon\Carbon::now(),
+                'emission_standard'=>(int)rand(1,3)%2+1,
+            ]);
+
+        }}
+        /*
+        for($i=1;$i<=10001;$i++){
+            Car_type::create([
+                'name'=>'品牌12车系2车型'.$i,
+                'level'=>3,
+                'parent_id'=>643947,
                 'seat_num'=>(int)rand(1,5)+5,
                 'made_at'=>\Carbon\Carbon::now(),
                 'emission_standard'=>(int)rand(1,3)%2+1,
             ]);
 
         }
-        /*for($i=6;$i<=10006;$i++){
+        for($i=1;$i<=10001;$i++){
             Car_type::create([
-                'name'=>'品牌4车系2车型'.$i,
+                'name'=>'品牌12车系3车型'.$i,
                 'level'=>3,
-                'parent_id'=>661,
-                'seat_num'=>(int)rand(1,5)+5,
-                'made_at'=>\Carbon\Carbon::now(),
-                'emission_standard'=>(int)rand(1,3)%2+1,
-            ]);
-
-        }
-        for($i=6;$i<=10006;$i++){
-            Car_type::create([
-                'name'=>'品牌4车系3车型'.$i,
-                'level'=>3,
-                'parent_id'=>666,
+                'parent_id'=>643948,
                 'seat_num'=>(int)rand(1,5)+5,
                 'made_at'=>\Carbon\Carbon::now(),
                 'emission_standard'=>(int)rand(1,3)%2+1,
@@ -54,28 +66,29 @@ class TypeSeeder extends Seeder{
 
         }
 
-        for($i=6;$i<=10006;$i++){
+        for($i=518;$i<=10001;$i++){
             Car_type::create([
-                'name'=>'品牌4车系4车型'.$i,
+                'name'=>'品牌12车系4车型'.$i,
                 'level'=>3,
-                'parent_id'=>673,
+                'parent_id'=>643949,
                 'seat_num'=>(int)rand(1,5)+5,
                 'made_at'=>\Carbon\Carbon::now(),
                 'emission_standard'=>(int)rand(1,3)%2+1,
             ]);
 
         }
-        for($i=6;$i<=10006;$i++){
-            Car_type::create([
-                'name'=>'品牌4车系5车型'.$i,
-                'level'=>3,
-                'parent_id'=>664,
-                'seat_num'=>(int)rand(1,5)+5,
-                'made_at'=>\Carbon\Carbon::now(),
-                'emission_standard'=>(int)rand(1,3)%2+1,
-            ]);
+            for($i=1;$i<=10001;$i++){
+                Car_type::create([
+                    'name'=>'品牌12车系5车型'.$i,
+                    'level'=>3,
+                    'parent_id'=>(693438+$j),
+                    'seat_num'=>(int)rand(1,5)+5,
+                    'made_at'=>\Carbon\Carbon::now(),
+                    'emission_standard'=>(int)rand(1,3)%2+1,
+                ]);
 
-        }*/
+            }
+
 
         /*$sum=0;
         for($i=1;$i<=5;$i++){
