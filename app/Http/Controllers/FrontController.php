@@ -53,7 +53,7 @@ class FrontController extends Controller
     public function postSelectSeries(Request $request){
         $brand=Car_type::where('level',1)->where('name',$request->get('brand'))->first();
         $series=Car_type::where('level',2)->where('name',$request->get('series'))->where('parent_id',$brand->id)->first();
-        $types=Car_type::where('level',3)->where('parent_id',$series->id)->get();
+        $types=Car_type::where('level',3)->where('parent_id',$series->id)->get(['name']);
         return $types;
     }
 

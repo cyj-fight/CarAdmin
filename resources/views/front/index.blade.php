@@ -35,8 +35,7 @@
                             brand:brand,
                             series:series,
                             type:car_type,
-                            emission_standard:emission_standard,
-                            a:a
+                            emission_standard:emission_standard
                         },function(data){//填充options
                             //var info = JSON.parse(data);
                             var car_series=data;
@@ -66,8 +65,7 @@
                             brand:brand,
                             series:series,
                             //type:car_type,
-                            emission_standard:emission_standard,
-                            a:a
+                            emission_standard:emission_standard
                         },function(data){
                             //alert(data);
                             var types=data;
@@ -112,8 +110,7 @@
                                 brand:brand,
                                 series:series,
                                 type:car_type,
-                                emission_standard:emission_standard,
-                                a:a
+                                emission_standard:emission_standard
                             },function(data){//填充options
                                 //var info = JSON.parse(data);
                                 var series=data;
@@ -162,8 +159,7 @@
                                 brand:brand,
                                 series:series,
                                 //type:car_type,
-                                emission_standard:emission_standard,
-                                a:a
+                                emission_standard:emission_standard
                             },function(data){
                                 //alert(data);
                                 var types=data;
@@ -272,7 +268,7 @@
             <button class="icon left arrow">上一页</button>
 
         </a>
-        <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url((request('page')==1)?request('page'):((int)request('page')+1)) }}" class="item{{ (request('page') == 1) ? ' disabled' : '' }}">
+        <a href="{{ $types->appends(['brand'=>request('brand'),'series'=>request('series'),'type'=>request('type'),'emission_standard'=>request('emission_standard')])->Url((request('page')==$types->LastPage())?request('page'):((int)request('page')+1)) }}" class="item{{ (request('page') == 1) ? ' disabled' : '' }}">
             <button class="icon left arrow">下一页</button>
 
         </a>&nbsp;

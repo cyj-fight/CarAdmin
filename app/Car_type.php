@@ -138,6 +138,7 @@ class Car_type extends Model
 
 
 
+
         $types=DB::table('car_types')->where('level','=','3');
             //->where('brands.brands',$brands);
             //->where('car_series.car_series','=',$series)
@@ -180,7 +181,7 @@ class Car_type extends Model
             }
         }
 
-        $types=$types->paginate(50);
+        $types=$types->select(['name','parent_id','made_at','emission_standard','seat_num'])->paginate(50);
         return $types;
         //dd($types);
         //$types=DB::table('car_types')->where('level','=','3');
@@ -246,7 +247,7 @@ class Car_type extends Model
                 if(isset($brand)){
                     $series=$series->where('parent_id',$brand->id);
                 }
-                $series=$series->get();
+                $series=$series->get(['name']);
             return $series;
         }
     }

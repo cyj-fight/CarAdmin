@@ -21,19 +21,19 @@ class TypeSeeder extends Seeder{
         }*/
 
 
-        /*for($i=1;$i<=10;$i++){
+      /* for($i=1;$i<=10;$i++){
             Car_type::create([
-                'name'=>'品牌12车系'.$i,
+                'name'=>'品牌15车系'.$i,
                 'level'=>2,
-                'parent_id'=>16358,
+                'parent_id'=>16527,
             ]);
         }
 */
         for($j=1;$j<=10;$j++){
+            $parent_id= 993498+$j;
             for($i=1;$i<=10001;$i++){
-                $parent_id=693438+$j;
             Car_type::create([
-                'name'=>'品牌12车系'.$j.'车型'.$i,
+                'name'=>'品牌15车系'.$j.'车型'.$i,
                 'level'=>3,
                 'parent_id'=>$parent_id,
                 'seat_num'=>(int)rand(1,5)+5,
